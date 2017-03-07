@@ -17,10 +17,10 @@
  	body.css({
  		width:'100%',
  		margin:0
- 	})
+ 	});
  	var video = $('#video');
- 	video.width(body.width());
- 	video.height(body.height());
+ 	video.width($(window).width());
+ 	video.height($(window).height());
 
  	if(Hls.isSupported()) {
 	    var hls = new Hls();
