@@ -11,7 +11,7 @@
 	</style>
 </head>
 <body>
-<video id="video" autoplay="true"></video>
+<video id="video" autoplay="true" controls="true"></video>
 <script>
  	var body = $('body');
  	body.css({
@@ -19,11 +19,9 @@
  		margin:0
  	})
  	var video = $('#video');
- 	video.css({
- 		width:'100%',
- 		height:'100%',
- 		background-color: 0xFF0000
- 	})
+ 	video.width(body.width());
+ 	video.height(body.height());
+
  	if(Hls.isSupported()) {
 	    var hls = new Hls();
 	    hls.loadSource('http://www.streambox.fr/playlists/test_001/stream.m3u8');
