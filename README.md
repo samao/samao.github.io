@@ -13,7 +13,6 @@
 <body>
 <video id="video"></video>
 <script>
- $(function(){
  	var body = $('body');
  	body.css({
  		width:'100%',
@@ -31,7 +30,6 @@
 	 }else{
 	 	video.html('不支持的视频');
 	 }
- })
 </script>
 
 </body>
