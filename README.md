@@ -19,8 +19,13 @@
  		margin:0
  	});
  	var video = $('#video');
- 	video.width($(window).width());
- 	video.height($(window).height());
+ 	var rect = {width:$(window).width(),height:$(window).height()};
+
+ 	var box = $(".container");
+ 	box.width(rect.width);
+ 	box.height(rect.height);
+ 	video.width(rect.width);
+ 	video.height(rect.height);
 
  	if(Hls.isSupported()) {
 	    var hls = new Hls();
