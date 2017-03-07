@@ -11,7 +11,7 @@
 	</style>
 </head>
 <body>
-<video id="video" autoplay></video>
+<video id="video" autoplay="true"></video>
 <script>
  	var body = $('body');
  	body.css({
