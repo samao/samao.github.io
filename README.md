@@ -4,7 +4,7 @@
 	<script type="text/javascript" src="jquery-2.2.4.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/hls.js/latest/hls.min.js"></script>
 	<style type="text/css">
-	video{
+	.video{
 		width: 400px;
 		height: 300px;
 	}
@@ -19,6 +19,11 @@
  		margin:0
  	})
  	var video = $('#video');
+ 	video.css({
+ 		width:'100%',
+ 		height:'100%',
+ 		background-color: 0xFF0000
+ 	})
  	if(Hls.isSupported()) {
 	    var hls = new Hls();
 	    hls.loadSource('http://www.streambox.fr/playlists/test_001/stream.m3u8');
