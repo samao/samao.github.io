@@ -16,7 +16,7 @@
   if(Hls.isSupported()) {
     var video = document.getElementById('video');
     var hls = new Hls();
-    hls.loadSource('http://cnhlsvodhls01.e.vhall.com//vhallrecord/682723428/20161222125031/record.m3u8');
+    hls.loadSource('http://www.streambox.fr/playlists/test_001/stream.m3u8');
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED,function() {
       video.play();
