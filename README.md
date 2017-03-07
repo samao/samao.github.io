@@ -11,12 +11,11 @@
 	</style>
 </head>
 <body>
-<video id="video"></video>
+<video id="video" autoplay></video>
 <script>
  	var body = $('body');
  	body.css({
  		width:'100%',
- 		height:'100%',
  		margin:0
  	})
  	var video = $('#video');
