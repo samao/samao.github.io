@@ -13,17 +13,23 @@
 <body>
 <video id="video" autoplay="true" controls="true"></video>
 <script>
+	var rect = {width:$(window).width(),height:$(window).height()};
+
  	var body = $('body');
  	body.css({
  		width:'100%',
  		margin:0
  	});
- 	var video = $('#video');
- 	var rect = {width:$(window).width(),height:$(window).height()};
+ 	body.height(rect.height);
 
  	var box = $(".container");
- 	box.width(rect.width);
- 	box.height(rect.height);
+ 	box.css({
+ 		width:"100%",
+ 		height:"100%",
+ 		margin:0
+ 	})
+
+ 	var video = $('#video');
  	video.width(rect.width);
  	video.height(rect.height);
 
