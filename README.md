@@ -22,7 +22,7 @@
  	if(Hls.isSupported()) {
 	    var hls = new Hls();
 	    hls.loadSource('http://www.streambox.fr/playlists/test_001/stream.m3u8');
-	    hls.attachMedia(video);
+	    hls.attachMedia(video.get(0));
 	    hls.on(Hls.Events.MANIFEST_PARSED,function() {
 	      video.play();
 	  });
