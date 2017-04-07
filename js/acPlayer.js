@@ -481,7 +481,28 @@ $(() => {
 				if(this._auto){
 					this.run();
 				}
-			})
+			});
+
+			var ws = new WebSocket(`ws://danmaku.acfun.cn:443/${vid}`);
+			ws.onopen = (e) => {
+				console.log('onopen',e);
+			};
+			ws.onmessage = (e) => {
+				console.log('onmessage',e);
+			};
+			ws.onclose = (e) => {
+				console.log('onclose',e);
+			};
+			ws.onerror = (e) => {
+				console.log('onerror',e);
+			};
+
+			this._ws = ws;
+		}
+		//发送消息
+		send(msg){
+			if(this._ws)
+				this._ws.send(msg);
 		}
 		//当前视频时间
 		get currentTime(){
