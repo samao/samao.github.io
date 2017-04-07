@@ -195,7 +195,7 @@ $(() => {
 		'padding':'5px 0px',
 		'text-align':'center',
 		'line-height':'16px',
-		'box-sizing':'inherit',
+		'box-sizing':'unset',
 	});
 	volumeBar.find('span').css({
 		'font-family':'微软雅黑',
