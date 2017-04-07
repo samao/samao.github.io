@@ -154,7 +154,7 @@ $(() => {
 	});
 
 	//图标文件夹
-	const imgFloder = '../image/'
+	const imgFloder = 'image/'
 
 	//------左边组件
 	let togglePlayBut = createButton('play',`${imgFloder}V3Play.png`,'','left');
