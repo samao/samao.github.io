@@ -1,14 +1,17 @@
 $(() => {
 	//------工具函数
-	const createButton = (id,imgUrl = '',float = 'right') => {
-		let button = $(`<li><div id="${id}"></div></li>`);
+	const createButton = (id,imgUrl = '',text='',float = 'right') => {
+		let button = $(`<li><div id="${id}">${text}</div></li>`);
 		button.css({
-			'width':40,
-			'height':40,
-			'overflow':'hidden',
+			'width':'40px',
+			'height':'40px',
+			'line-height':'40px',
+			'overflow':'none',
 			'background-color':'white',
 			'float':float,
-			'position':'relative'
+			'position':'relative',
+			'text-align':'center',
+			'cursor':'hand',
 		});
 		if(imgUrl !== '')
 		{
@@ -26,6 +29,10 @@ $(() => {
 		});
 		return button;
 	}
+	//阻止点击冒泡
+	const stopPropagation = (ele) => {
+		ele.click(e => e.stopPropagation());
+	}
 
 	const digit = time =>
 	{
@@ -42,15 +49,20 @@ $(() => {
 		return (_hours == 0 ? ("") : (_hours < 10 ? ("0" + _hours.toString() + ":") : (_hours.toString() + ":"))) + (_mins < 10 ? ("0" + _mins.toString()) : (_mins.toString())) + ":" + (_seconds < 10 ? ("0" + _seconds.toString()) : (_seconds.toString()));
 	}
 
-
+	const PLAYER_WIDTH = '100%';
+	const PLAYER_HEIGHT = '100%';
 	//------容器
 	let player = $('#acPlayer');
 	player.css({
-		'width':1158,
-		'height':728,
+		'width':PLAYER_WIDTH+'px',
+		'height':PLAYER_HEIGHT+'px',
 		'background-color':'black',
 		'position':'relative',
-		'margin-left':0,
+		'left':0,
+		'top':0,
+		'font-size':'12px',
+		'font-family':'微软雅黑',
+		'color':'#999',
 	});
 	//------video jq
 	let video = $(`<video id="video"></video>`);
@@ -70,13 +82,14 @@ $(() => {
 		'background-color':'white',
 		'border': '1px',
 		'border-color':'gray',
-		'overflow':'hidden',
+		'overflow':'none',
 		'position':'relative',
 	});
 	//-------
 	function setupPlayer(){
 		player.append(video);
 		player.append(danmu);
+		player.append(pauseAnimate);
 		player.append(control);
 		control.append(leftBox);
 		control.append(rightBox);
@@ -88,12 +101,15 @@ $(() => {
 		rightBox.append(optBut);
 		rightBox.append(lopBut);
 		rightBox.append(volBut);
+		volBut.append(volumeBar);
 		rightBox.append(danmuBut);
 		rightBox.append(qualityBut);
+		qualityBut.append(qualityOpt);
 
+		//设置统一样式
 		danmu.css({
 			'width':'100%',
-			'height':'100%',
+			'height':'calc(100% - 40px)',
 			'position':'absolute',
 			'top':0,
 			'left':0,
@@ -102,7 +118,7 @@ $(() => {
 			'outline':'none',
 			'pading-right':5,
 			'margin':0,
-			'padding-bottom':8,
+			'padding-bottom':0,
 			'border':1
 		});
 
@@ -112,6 +128,8 @@ $(() => {
 			'height':40,
 			'line-height':'40px',
 			'padding':'0px 5px 0px 5px',
+			'font-family':'微软雅黑',
+			'font-size':12,
 		});
 	}
 
@@ -135,10 +153,11 @@ $(() => {
 		'float':'right'
 	});
 
+	//图标文件夹
 	const imgFloder = '../image/'
 
 	//------左边组件
-	let togglePlayBut = createButton('play',`${imgFloder}V3Play.png`,'left');
+	let togglePlayBut = createButton('play',`${imgFloder}V3Play.png`,'','left');
 	let timelabel = $(`<li>00:00 / 00:00</li>`);
 
 	//右边组件
@@ -147,21 +166,147 @@ $(() => {
 	let lopBut = createButton('loop',`${imgFloder}V3UnLoop.png`);
 	let volBut = createButton('vol',`${imgFloder}V3Volume.png`);
 	let danmuBut = createButton('danmu',`${imgFloder}V3DanmuOpen.png`);
-	let qualityBut = createButton('quality');
+	let qualityBut = createButton('quality','','标清');
 
-	//-------
+	//暂停动画
+	let pauseAnimate = $(`<img src="${imgFloder}pause.gif">`);
+	pauseAnimate.css({
+		'position':'absolute',
+		'right':20,
+		'bottom':20 + 40,
+		'width':233,
+		'height':50,
+	});
+
+	//音量控制
+	let volumeBar = $(`<div><span>100%</span><div id="volbar"></div></div>`);
+	volumeBar.css({
+		'width':40,
+		'height':100,
+		'background-color':'white',
+		'border':1,
+		'border-color':'#666',
+		'border-style':'none',
+		'border-radius':'3px 3px 0px 0px',
+		'position':'absolute',
+		'top':-110,
+		'color':'#999',
+		'padding':'5px 0px',
+		'text-align':'center',
+		'line-height':'16px',
+	});
+	volumeBar.find('span').css({
+		'font-family':'微软雅黑',
+		'height':16,
+		'font-size':12,
+	})
+	volumeBar.find('div').css({
+		'width':8,
+		'background-color':'red',
+		'border-radius':3,
+		'height':80,
+		'margin':'5px 16px 0px 16px',
+	})
+	volumeBar.hide();
+
+	//清晰度
+	let qualityOpt = $(`
+			<ul>
+				<li>原画</li>
+				<li>超清</li>
+				<li>高清</li>
+				<li>标清</li>
+			</ul>
+		`);
+	qualityOpt.css({
+		'width':82,
+		'list-style':'none',
+		'background-color':'white',
+		'border-radius':'3px 3px 0px 0px',
+		'position':'absolute',
+		'top':-(31*4 + 10),
+		'color':'#999',
+		'padding':'5px 0px',
+		'left':-21,
+		'text-align':'center',
+		'line-height':'31px',
+	});
+	qualityOpt.hide();
+
+	//-------视频请求成功
 	let ready = () => {
 		console.log('视频头文件解析完成');
 		togglePlayBut.click(() => toggleVideo());
 		lopBut.click(() => toggleLoop());
-		volBut.click(() => toggleMute());
+		volBut.click((e) => toggleMute());
 		danmuBut.click(() => toggleDanmu());
+		fullscreenBut.click(() => toggleScreen());
+
+		volBut.hover(()=>volumeBar.show(),()=>volumeBar.hide());
+		qualityBut.hover(()=>qualityOpt.show(),()=>qualityOpt.hide());
+		
+		stopPropagation(volumeBar);
 
 		video.on('contextmenu',() => false);
 		danmu.on('contextmenu',() => false);
 		dm.load();
+
+		video.css('height','calc(100% - 40px)');
+		danmu.css('height','calc(100%-40px)');
+		player.on('fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange',(e) => {
+			toggleUI();
+		})
 	}
 
+	const fullScreenStatus = () => document.fullscreen||document.mozFullScreen||document.webkitIsFullScreen||document.msFullscreenElement;
+
+	const toggleUI = () => {
+		let fullscreen = fullScreenStatus();
+		if(fullscreen){
+			player.css({
+				'width':'100%',
+				'height':'100%',
+				'left':0,
+				'top':0,
+				'position':'absolute',
+			});
+		}else{
+			player.css({
+				'width':PLAYER_WIDTH+'px',
+				'height':PLAYER_HEIGHT+'px',
+				'left':0,
+				'top':0,
+				'position':'relative',
+			});
+		}
+	}
+	//切换全屏
+	let toggleScreen = () => {
+		let div = player.get(0);
+		let fullscreen = fullScreenStatus();
+		if(div.requestFullscreen){
+			if(!fullscreen)
+				div.requestFullscreen();
+			else
+				document.exitFullscreen();
+		}else if(div.mozRequestFullScreen){
+			if(!fullscreen)
+				div.mozRequestFullScreen();
+			else
+				document.mozCancelFullScreen();
+		}else if(div.webkitRequestFullScreen){
+			if(!fullscreen)
+				div.webkitRequestFullScreen();
+			else
+				document.webkitCancelFullScreen();
+		}else if(div.msRequestFullscreen){
+			if(!fullscreen)
+				div.msRequestFullscreen();
+			else
+				document.msExitFullscreen();
+		}
+	}
+	//弹幕显隐
 	let toggleDanmu = () => {
 		if(danmu.css('display') === 'none')
 		{
@@ -172,18 +317,19 @@ $(() => {
 			danmuBut.find('img').attr('src',`${imgFloder}V3DanmuHiden.png`);
 		}
 	}
-
+	//开关静音
 	let toggleMute = () => {
 		if(video.prop('muted'))
 		{
 			video.prop('muted',false);
 			volBut.find('img').attr('src',`${imgFloder}V3Volume.png`);
+			console.log('音量控制',volumeBar.width(),volumeBar.height());
 		}else{
 			video.prop('muted',true);
 			volBut.find('img').attr('src',`${imgFloder}V3Mute.png`);
 		}
 	}
-
+	//循环开关
 	let toggleLoop = () => {
 		if(video.attr('loop'))
 		{
@@ -194,17 +340,49 @@ $(() => {
 			lopBut.find('img').attr('src',`${imgFloder}V3Loop.png`)
 		}
 	}
+	//暂停开关
 	let toggleVideo = () => {
-		let videoDom = video.get(0);
-		if(videoDom.paused){
-			videoDom.play();
-			togglePlayBut.find('img').attr('src',`${imgFloder}V3Pause.png`)
+		if(video.prop('paused')){
+			video.trigger('play');
+			togglePlayBut.find('img').attr('src',`${imgFloder}V3Pause.png`);
+			toggleAnimate(true);
 		}else{
-			videoDom.pause();
-			togglePlayBut.find('img').attr('src',`${imgFloder}V3Play.png`)
+			video.trigger('pause');
+			togglePlayBut.find('img').attr('src',`${imgFloder}V3Play.png`);
+			toggleAnimate(false);
 		}
 	}
-
+	let finished = () => {
+		if(video.attr('loop')){
+			video.get(0).play();
+		}else{
+			video.get(0).pause();
+			togglePlayBut.find('img').attr('src',`${imgFloder}V3Play.png`);
+			toggleAnimate(false);
+		}
+	}
+	//暂停动画
+	let toggleAnimate = (bool) => {
+		if(bool){
+			pauseAnimate.animate({
+				'opacity':0,
+				'width':233 * 1.5,
+				'height':50 * 1.5,
+				'bottom':20 - 50*.25 + 40,
+				'right':20 - 233*.25,
+			},'slow',()=>pauseAnimate.hide());
+		}else{
+			pauseAnimate.show();
+			pauseAnimate.animate({
+				'opacity':1,
+				'width':233,
+				'height':50,
+				'right':20,
+				'bottom':20 + 40,
+			});
+		}
+	}
+	//弹幕数据结构
 	class DanmuVo{
 		constructor(){
 			this.x = 0;
@@ -266,6 +444,7 @@ $(() => {
 		}
 	}
 
+	//弹幕管理类
 	class Danmaku{
 
 		constructor(video,canvas,auto = true){
@@ -279,6 +458,7 @@ $(() => {
 			this._time = video.get(0).currentTime;
 		}
 
+		//弹幕加载
 		load(vid = '5035599'){
 			$.get(`http://danmu.aixifan.com/V4/${vid}_2/4073558400000/1000?order=-1`,(data) => {
 				console.log('加载完毕');
@@ -300,11 +480,11 @@ $(() => {
 				}
 			})
 		}
-
+		//当前视频时间
 		get currentTime(){
 			return this._video.currentTime;
 		}
-
+		//搜索当前需要添加弹幕
 		update(){
 			if(this._video.paused) return;
 			if(this._time !== this.currentTime){
@@ -326,7 +506,7 @@ $(() => {
 				});
 			}
 		}
-
+		//渲染弹幕
 		render(){
 			
 			if(this._video.paused) return;
@@ -359,21 +539,20 @@ $(() => {
 				this._set.delete(id);
 			}
 		}
-
+		//开启弹幕刷新
 		run(){
 			console.log(`弹幕数 ${this._map.size}`);
 			/*for(let [key, value] of this._map){
 				console.log(key,value.text);
 			}*/
-
 			this._id = setInterval(() => this.render(),50);
 		}
-
+		//关闭弹幕刷新
 		stop(){
 			clearInterval(this._id);
 		}
 	}
-
+	//弹幕管理
 	let dm = new Danmaku(video,danmu);
 
 	//-------
@@ -383,6 +562,10 @@ $(() => {
 	    hls.loadSource("http://www.streambox.fr/playlists/test_001/stream.m3u8")//'http://cnhlsvodhls01.e.vhall.com//vhallrecord/682723428/20161222125031/record.m3u8');
 	    hls.attachMedia(video.get(0));
 		hls.on(Hls.Events.MANIFEST_PARSED,ready);
+		video.on('ended',() => {
+			console.log('播放结束');
+			finished();
+		})
 		setInterval(() => {
 			var cur = digit(video.prop('currentTime'));
 			var dur = digit(video.prop('duration'));
