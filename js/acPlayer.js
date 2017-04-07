@@ -150,7 +150,8 @@ $(() => {
 		'list-style':'none',
 		'margin':0,
 		'padding':0,
-		'float':'right'
+		'position':'absolute',
+		'right':0,
 	});
 
 	//图标文件夹
