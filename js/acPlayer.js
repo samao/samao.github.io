@@ -176,6 +176,7 @@ $(() => {
 		'bottom':20 + 40,
 		'width':233,
 		'height':50,
+		'background-color':'Transparent',
 	});
 
 	//音量控制
