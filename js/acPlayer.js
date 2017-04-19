@@ -33,7 +33,7 @@ $(() => {
 	const stopPropagation = (ele) => {
 		ele.click(e => e.stopPropagation());
 	}
-
+	//格式化秒数
 	const digit = time =>
 	{
 		if(Number.isNaN(time)) return '00:00';
@@ -47,6 +47,23 @@ $(() => {
 			_seconds = 0;
 		}
 		return (_hours == 0 ? ("") : (_hours < 10 ? ("0" + _hours.toString() + ":") : (_hours.toString() + ":"))) + (_mins < 10 ? ("0" + _mins.toString()) : (_mins.toString())) + ":" + (_seconds < 10 ? ("0" + _seconds.toString()) : (_seconds.toString()));
+	}
+	const debug = true;
+	//日志
+	const log = (...val) => {
+		if(debug)
+			console.log(`%c[H5Player]%c ${new Date().toLocaleTimeString()},${val.join(',')}`,"color:red;font-weight:bold;","color:black");
+	};
+	//获取当前缓存范围
+	const timeRange = () => {
+		let ranges = video.prop('buffered');
+		let curTime = video.prop('currentTime');
+		for(let i = 0; i < ranges.length; ++i){
+			if(ranges.start(i) <= curTime && ranges.end(i)>= curTime){
+				return {'start':ranges.start(i),'end':ranges.end(i)};
+			}
+		}
+		return {'start':curTime,'end':curTime};
 	}
 
 	const PLAYER_WIDTH = '100%';
@@ -71,7 +88,17 @@ $(() => {
 		'height':'100%',
 	});
 	//-------danmu
-	let danmu = $(`<canvas id="danmu"></canvas>`)
+	let danmu = $(`<canvas id="danmu"></canvas>`);
+	//-------buffer
+	let bufferLayer = $(`<div>
+			<div id="buffer">
+				<div id="circle"></div>
+				<div id="head">
+					<img src="http://cdn.aixifan.com/dotnet/20130418/umeditor/dialogs/emotion/images/ac/01.gif"/>
+				</div>
+			</div>
+		</div>`);
+
 	//-------控制栏
 	const CONTROL_H = 40;
 	let control = $(`<div id="control"></div>`);
@@ -85,17 +112,44 @@ $(() => {
 		'overflow':'none',
 		'position':'relative',
 	});
+	const PRO_H = 4;
+	let progressBar = $(`<div><div id="loaded"></div><div id="played"></div></div>`);
+	progressBar.css({
+		'width':'100%',
+		'height':PRO_H,
+		'background-color':'black',
+		'position':'absolute',
+		'top':-PRO_H,
+	});
+	let played = progressBar.find('#played');
+	played.css({
+		'float':'left',
+		'background-color':'red',
+		'height':'100%',
+		'position':'absolute',
+	});
+	let loaded = progressBar.find('#loaded');
+	loaded.css({
+		'background-color':'#999',
+		'float':'left',
+		'height':'100%',
+		'position':'absolute',
+	});
 	//-------
 	function setupPlayer(){
 		player.append(video);
 		player.append(danmu);
+		player.append(bufferLayer);
 		player.append(pauseAnimate);
 		player.append(control);
+		control.append(progressBar);
 		control.append(leftBox);
 		control.append(rightBox);
 
 		leftBox.append(togglePlayBut);
 		leftBox.append(timelabel);
+		leftBox.append(inputBar);
+		leftBox.append(sendBut);
 
 		rightBox.append(fullscreenBut);
 		rightBox.append(optBut);
@@ -114,6 +168,47 @@ $(() => {
 			'top':0,
 			'left':0,
 		});
+		//-----
+		bufferLayer.css({
+			'width':'100%',
+			'height':'calc(100% - 40px)',
+			'position':'absolute',
+			'top':0,
+			'left':0,
+		});
+		bufferLayer.find('#buffer').css({
+			'width':130,
+			'height':130,
+			'margin':'auto',
+			'position':'relative',
+			'display':'table-cell',
+			'left':(bufferLayer.width() - 130)/2,
+			'top':(bufferLayer.height() - 130)/2,
+		});
+		bufferLayer.find('#circle').css({
+			'width':'100%',
+			'height':'100%',
+			'opacity':.6,
+			'border-radius':'50%',
+			'background-color':'#334f74',
+		})
+		bufferLayer.find('#head').css({
+			'width':90,
+			'height':90,
+			'background-color':'white',
+			'margin':'auto',
+			'border-radius':'50%',
+			'position':'absolute',
+			'top':20,
+			'left':20,
+		});
+		bufferLayer.find('img').css({
+			'width':75,
+			'height':75,
+			'margin':10,
+		});
+		bufferLayer.hide();
+		//------
 		player.find('ul li').css({
 			'outline':'none',
 			'pading-right':5,
@@ -131,6 +226,8 @@ $(() => {
 			'font-family':'微软雅黑',
 			'font-size':12,
 		});
+
+		inputArea.width(control.width() - rightBox.width() - togglePlayBut.width() - timelabel.width() - 130);
 	}
 
 	//-------左边工具
@@ -181,7 +278,7 @@ $(() => {
 	});
 
 	//音量控制
-	let volumeBar = $(`<div><span>100%</span><div id="volbar"></div></div>`);
+	let volumeBar = $(`<div><span>100</span><div id="volbar"></div></div>`);
 	volumeBar.css({
 		'width':40,
 		'height':100,
@@ -208,17 +305,17 @@ $(() => {
 		'background-color':'red',
 		'border-radius':3,
 		'height':80,
-		'margin':'5px 16px 0px 16px',
+		'margin':'3px 16px 0px 16px',
 	})
 	volumeBar.hide();
 
 	//清晰度
 	let qualityOpt = $(`
 			<ul>
-				<li>原画</li>
-				<li>超清</li>
-				<li>高清</li>
-				<li>标清</li>
+				<li data="1080p">原画</li>
+				<li data="720p">超清</li>
+				<li data="480p">高清</li>
+				<li data="320p">标清</li>
 			</ul>
 		`);
 	qualityOpt.css({
@@ -236,18 +333,109 @@ $(() => {
 	});
 	qualityOpt.hide();
 
+	let inputBar = $(`<li><input id="input" placeholder="这位爷，不发个弹幕玩玩嘛？"/></li>`)
+	inputBar.css({
+		'height':40,
+		'line-height':'40px',
+		'margin-left':10,
+		'float':'left',
+	});
+	let inputArea = inputBar.find('input');
+	inputArea.css({
+		'padding':3,
+		'width':'100%',
+		'border-radius':4,
+		'background-color':'#f5f5f5',
+		'padding-left':10,
+		'height':26,
+		'float':'left',
+		'border':'none',
+		'margin':6,
+		'font-size':'12px',
+		'outline':'none',
+	});
+	let sendBut = $(`<li><div>发送</div></li>`);
+	sendBut.css({
+		'width':50,
+		'height':'100%',
+		'color':'white',
+		'float':'left',
+	});
+	sendBut.find('div').css({
+		'background-color':'red',
+		'color':'white',
+		'width':'100%',
+		'height':26,
+		'line-height':'26px',
+		'text-align':'center',
+		'margin':'6px 0 6px 10px',
+		'border-radius':4,
+	});
+
 	//-------视频请求成功
 	let ready = () => {
-		console.log('视频头文件解析完成');
+		log('视频头文件解析完成');
 		togglePlayBut.click(() => toggleVideo());
 		lopBut.click(() => toggleLoop());
 		volBut.click((e) => toggleMute());
 		danmuBut.click(() => toggleDanmu());
 		fullscreenBut.click(() => toggleScreen());
+		sendBut.click(()=>{
+			if(inputArea.val() !== ''){
+				dm.send(JSON.stringify({
+					action:'post',
+					command:JSON.stringify({
+						mode:'1',
+						color:0xFF0000,
+						size:20,
+						stime:0,
+						user:'1368971',
+						message:inputArea.val()
+					})
+				}));
+				inputArea.val('');
+			}
+		});
 
 		volBut.hover(()=>volumeBar.show(),()=>volumeBar.hide());
 		qualityBut.hover(()=>qualityOpt.show(),()=>qualityOpt.hide());
-		
+		progressBar.hover(()=>{
+			progressBar.animate({
+				'height':6,
+				'top':-6,
+			},'fast');
+		},()=>{
+			progressBar.animate({
+				'height':PRO_H,
+				'top':-PRO_H,
+			},'fast');
+		});
+		progressBar.click(e => {
+			log('seek',Number(video.prop('duration') * e.offsetX/progressBar.width()));
+			video.prop('currentTime',Number(video.prop('duration') * e.offsetX/progressBar.width()));
+		});
+
+		inputArea.focus(()=>inputArea.attr('placeholder','')).blur(()=>inputArea.attr('placeholder','这位爷，不发个弹幕玩玩嘛？'));
+
+		bufferAnimate();
+
+		$(window).resize(()=>{
+			let inputWidth = control.width() - rightBox.width() - togglePlayBut.width() - timelabel.width() - 130;
+			if(inputWidth > 200){
+				inputBar.show();
+				sendBut.show();
+				inputArea.width(inputWidth);
+			}else{
+				inputBar.hide();
+				sendBut.hide();
+			}
+
+			bufferLayer.find('#buffer').css({
+				'left':(bufferLayer.width() - 130)/2,
+				'top':(bufferLayer.height() - 130)/2,
+			})
+		});
+
 		stopPropagation(volumeBar);
 
 		video.on('contextmenu',() => false);
@@ -258,7 +446,57 @@ $(() => {
 		danmu.css('height','calc(100%-40px)');
 		player.on('fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange',(e) => {
 			toggleUI();
-		})
+		});
+
+		let loading = true;
+		setInterval(() => {
+			var cur = digit(video.prop('currentTime'));
+			var dur = digit(video.prop('duration'));
+			timelabel.html(`${cur} / ${dur}`);
+			dm.update();
+			played.width(progressBar.width() * video.prop('currentTime')/video.prop('duration'));
+
+			let timeRanges = video.prop('buffered');
+			if(timeRanges.length > 0)
+			{
+				let {start,end} = timeRange();
+				loaded.width(progressBar.width() * end/video.prop('duration'));
+				let range = (end - video.prop('currentTime'));
+				if(range > 20 && loading){
+					log('暂停加载',end);
+					hls.stopLoad();
+					loading = false;
+				}else{
+					if(!loading && range < 10){
+						log('恢复加载');
+						loading = true;
+						hls.startLoad();
+					}
+				}
+			}
+			
+		},100)
+	}
+
+	let circleTo = true
+	const bufferAnimate = () => {
+		let circle = bufferLayer.find('#circle');
+		if(circleTo){
+	      circle.animate({
+	        'opacity':.5,
+	        'width':120,
+	        'height':120,
+	        'margin':5,
+	      },1000,()=>bufferAnimate())
+	    }else{
+	      circle.animate({
+	        'opacity':.6,
+	        'width':130,
+	        'height':130,
+	        'margin':0,
+	      },1000,()=>bufferAnimate())
+	    }
+	    circleTo = !circleTo;
 	}
 
 	const fullScreenStatus = () => document.fullscreen||document.mozFullScreen||document.webkitIsFullScreen||document.msFullscreenElement;
@@ -326,7 +564,7 @@ $(() => {
 		{
 			video.prop('muted',false);
 			volBut.find('img').attr('src',`${imgFloder}V3Volume.png`);
-			console.log('音量控制',volumeBar.width(),volumeBar.height());
+			log('音量控制',volumeBar.width(),volumeBar.height());
 		}else{
 			video.prop('muted',true);
 			volBut.find('img').attr('src',`${imgFloder}V3Mute.png`);
@@ -384,13 +622,26 @@ $(() => {
 				'bottom':20 + 40,
 			});
 		}
-	}
+	} 
+
 	//弹幕数据结构
 	class DanmuVo{
 		constructor(){
 			this.x = 0;
 			this.y = 0;
 			this.speed = 6;
+		}
+		static get SIZE(){
+			return [16,25,37];
+		}
+		static get MOVE(){
+			return "1";
+		}
+		static get TOP(){
+			return "5";
+		}
+		static get BOTTOM(){
+			return "4";
 		}
 		set id(value){
 			this._id = value;
@@ -414,7 +665,9 @@ $(() => {
 			this._size = value;
 		}
 		get size(){
-			return this._size;
+			let min = Math.min.apply(null,DanmuVo.SIZE);
+			let max = Math.max.apply(null,DanmuVo.SIZE);
+			return Math.min(max,Math.max(min,this._size));
 		}
 		set time(value){
 			this._time = Number(value);
@@ -430,7 +683,11 @@ $(() => {
 		}
 
 		update(){
-			this.x -= this.speed;
+			if(this.mode === DanmuVo.MOVE){
+				this.x -= this.speed;
+			}else{
+				this.alpha -= 2;
+			}
 		}
 
 		start(x,y,width){
@@ -439,11 +696,59 @@ $(() => {
 			this.y = Math.floor(y);
 			this.die = false;
 			this.width = width;
+			this.alpha = 100;
+		}
+
+		get height(){
+			return this.size + 2;
 		}
 
 		stop(){
 			this.running = false;
 			this.die = true;
+		}
+	}
+
+	class DanmuSocket extends WebSocket{
+		constructor(vid){
+			super(`ws://danmaku.acfun.cn:443/${vid}`);
+			super.onopen = this.onopen;
+			super.onclose = this.onclose;
+			super.onerror = this.onerror;
+			super.onmessage = this.onmessage;
+			this._vid = vid;
+		}
+
+		onopen(value){
+			log('连接成功');
+			this.sendAuthor();
+		}
+
+		onclose(value){
+			log('连接关闭');
+		}
+
+		onerror(value){
+			log('连接错误');
+		}
+
+		onmessage(body){
+			var response = JSON.parse(body.data);
+			if(response.status === '202'){
+				log('登录成功');
+				log('用户信息',JSON.parse(response.msg));
+			}else{
+				log('服务器消息',body);
+			}
+		}
+
+		sendAuthor(){
+			var user = {};
+			user['vid'] = this.vid;
+			user['time'] = Date.now();
+			user['uid'] = '1368971';
+			user['uid_ck'] = '1469459601';
+			this.send(JSON.stringify({'action':'auth',command:JSON.stringify(user)}));
 		}
 	}
 
@@ -459,16 +764,18 @@ $(() => {
 			this._id = 0;
 			this._video = video.get(0);
 			this._time = video.get(0).currentTime;
+			this._topOffset = 0;
+			this._bottomOffset = 0;
 		}
 
 		//弹幕加载
-		load(vid = '5035599'){
+		load(vid = '5084270'){
 			$.get(`http://danmu.aixifan.com/V4/${vid}_2/4073558400000/1000?order=-1`,(data) => {
-				console.log('加载完毕');
+				log('加载完毕');
 				let danmuMap = Array.from(data[2]);
 				for(let {c,m} of danmuMap){
 					let [time,color,mode,size,,,cmtid] = c.split(',');
-					//console.log(`时间 ${time} 颜色 ${Number(color).toString(16)} 样式 ${mode} 字号${size} 内容:%c${m}`,`color:#${Number(color).toString(16)};`);
+					//log(`时间 ${time} 颜色 ${Number(color).toString(16)} 样式 ${mode} 字号${size} 内容:%c${m}`,`color:#${Number(color).toString(16)};`);
 					let vo = new DanmuVo();
 					vo.time = time;
 					vo.color = color;
@@ -482,25 +789,14 @@ $(() => {
 					this.run();
 				}
 			});
-
-			var ws = new WebSocket(`ws://danmaku.acfun.cn:443/${vid}`);
-			ws.onopen = (e) => {
-				console.log('onopen',e);
-			};
-			ws.onmessage = (e) => {
-				console.log('onmessage',e);
-			};
-			ws.onclose = (e) => {
-				console.log('onclose',e);
-			};
-			ws.onerror = (e) => {
-				console.log('onerror',e);
-			};
-
+			
+			var ws = new DanmuSocket(vid);
 			this._ws = ws;
 		}
+		
 		//发送消息
 		send(msg){
+			log('发送弹幕',msg);
 			if(this._ws)
 				this._ws.send(msg);
 		}
@@ -517,7 +813,7 @@ $(() => {
 						if(this.currentTime < this._time || (this.currentTime - this._time > 1)){
 							return false;
 						}
-						return vo.time >= this._time && vo.time < this.currentTime && vo.mode === '1';
+						return vo.time >= this._time && vo.time < this.currentTime && ['1','4','5'].indexOf(vo.mode) !== -1;
 					}
 					return false;
 				});
@@ -541,6 +837,7 @@ $(() => {
 			ctx.clearRect(0,0,this._canvas.width,this._canvas.height);
 
 			var delMap = new Set();
+			
 			for(let id of this._set){
 				let vo = this._map.get(id);
 				ctx.font = `${vo.size}px 微软雅黑`; //设置绘制字体  
@@ -548,15 +845,43 @@ $(() => {
 				if(vo.running && !vo.die)
 				{
 					vo.update();
-					if(vo.x < -vo.width){
-						//console.log('删除弹幕',vo.x,-ctx.measureText(vo.text).width);
+					if(vo.x < -vo.width || vo.alpha <= 0){
+						//log('删除弹幕',vo.x,-ctx.measureText(vo.text).width);
 						vo.stop();
 						delMap.add(vo.id);
+						if(vo.mode === DanmuVo.TOP){
+							this._topOffset -= vo.height + 10;
+						}else if(vo.mode === DanmuVo.BOTTOM){
+							this._bottomOffset -= vo.height + 10;
+						}
 					}else{
 			    		ctx.fillText(vo.text, vo.x, vo.y);
 					}
 				}else{
-					vo.start(this._canvas.width + Math.random() * 30,Math.random() * (this._canvas.height - 40) + 20,ctx.measureText(vo.text).width);
+					let xpos = 0,ypos = 0;
+					switch(vo.mode){
+						case DanmuVo.MOVE:
+							//log('MOVE弹幕');
+							xpos = this._canvas.width + Math.random() * 30;
+							ypos = Math.random() * (this._canvas.height - 40) + 20;
+						break;
+						case DanmuVo.TOP:
+							//log('TOP弹幕');
+							xpos = (video.width() - ctx.measureText(vo.text).width) * .5;
+							ypos = this._topOffset + vo.height;
+						break;
+						case DanmuVo.BOTTOM:
+							//log('BOTTOM弹幕');
+							xpos = (video.width() - ctx.measureText(vo.text).width) * .5;
+							ypos = video.height() - this._bottomOffset - vo.height;
+						break;
+					}
+					if(vo.mode === DanmuVo.TOP){
+						this._topOffset += vo.height + 10;
+					}else if(vo.mode === DanmuVo.BOTTOM){
+						this._bottomOffset += vo.height + 10;
+					}
+					vo.start(xpos,ypos,ctx.measureText(vo.text).width);
 				}
 			}
 			for(let id of delMap){
@@ -565,9 +890,9 @@ $(() => {
 		}
 		//开启弹幕刷新
 		run(){
-			console.log(`弹幕数 ${this._map.size}`);
+			log(`弹幕数 ${this._map.size}`);
 			/*for(let [key, value] of this._map){
-				console.log(key,value.text);
+				log(key,value.text);
 			}*/
 			this._id = setInterval(() => this.render(),50);
 		}
@@ -578,25 +903,34 @@ $(() => {
 	}
 	//弹幕管理
 	let dm = new Danmaku(video,danmu);
-
+	const VOD_URL = "http://www.streambox.fr/playlists/test_001/stream.m3u8"
 	//-------
 	if(Hls.isSupported()) {
 		setupPlayer();
-	    var hls = new Hls();
-	    hls.loadSource("http://www.streambox.fr/playlists/test_001/stream.m3u8")//'http://cnhlsvodhls01.e.vhall.com//vhallrecord/682723428/20161222125031/record.m3u8');
+	    var hls = new Hls({debug:false});
+	    hls.loadSource(VOD_URL);
 	    hls.attachMedia(video.get(0));
 		hls.on(Hls.Events.MANIFEST_PARSED,ready);
 		video.on('ended',() => {
-			console.log('播放结束');
+			//log('播放结束');
 			finished();
+		});
+		video.on('waiting',()=>{
+			//log('缓冲');
+			bufferLayer.show();
 		})
-		setInterval(() => {
-			var cur = digit(video.prop('currentTime'));
-			var dur = digit(video.prop('duration'));
-			timelabel.html(`${cur} / ${dur}`);
-			dm.update();
-		},250)
+		video.on('canplay',()=>{
+			//log('缓冲完成');
+			bufferLayer.hide();
+		});
+		video.on('progress',e => {
+			//console.log('progress:',e);
+		})
 	 }else{
-	 	player.append($(`<span style="color:#FFF">不支持的浏览器</span>`));
+	 	try{
+	 		video.attr('src',VOD_URL);
+	 	}catch(e){
+	 		player.append($(`<span style="color:#FFF">不支持的浏览器${e.toString()}</span>`))
+	 	}
 	 }
 })
