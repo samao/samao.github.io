@@ -211,6 +211,7 @@ $(() => {
 			'width':75,
 			'height':75,
 			'margin':10,
+			'background-color':'unset',
 		});
 		bufferLayer.hide();
 		//------
