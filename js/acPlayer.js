@@ -419,6 +419,7 @@ $(() => {
 		progressBar.click(e => {
 			log('seek',Number(video.prop('duration') * e.offsetX/progressBar.width()));
 			video.prop('currentTime',Number(video.prop('duration') * e.offsetX/progressBar.width()));
+			if(!loading)hls.startLoad();
 		});
 
 		inputArea.focus(()=>inputArea.attr('placeholder','')).blur(()=>inputArea.attr('placeholder','这位爷，不发个弹幕玩玩嘛？'));
