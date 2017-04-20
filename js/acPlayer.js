@@ -441,13 +441,6 @@ $(() => {
 				'left':(bufferLayer.width() - 130)/2,
 				'top':(bufferLayer.height() - 130)/2,
 			});
-			try{
-				if(fullScreenStatus()){
-					$(screen).prop('orientation').lock('landscape-primary')
-				}else{
-					$(screen).prop('orientation').unlock();
-				}
-			}catch(e){}
 		});
 
 		stopPropagation(volumeBar);
@@ -580,6 +573,13 @@ $(() => {
 			else
 				document.msExitFullscreen();
 		}
+		try{
+			if(fullScreenStatus()){
+				$(screen).prop('orientation').lock('landscape')
+			}else{
+				$(screen).prop('orientation').unlock();
+			}
+		}catch(e){}
 	}
 	//弹幕显隐
 	let toggleDanmu = () => {
