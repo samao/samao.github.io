@@ -17,7 +17,8 @@ $(() => {
 		{
 			let img = $(`<img src="${imgUrl}" >`);
 			img.css({
-				'margin':'8px 8px 8px 8px'
+				'margin':'8px 8px 8px 8px',
+				'background-color':'Transparent',
 			})
 			button.find('div').append(img);
 		}
