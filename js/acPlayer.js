@@ -551,7 +551,10 @@ $(() => {
 	//切换全屏
 	let toggleScreen = () => {
 		let div = player.get(0);
-		let fullscreen = fullScreenStatus();
+		let fullscreen = fullScreenStatus()
+		try{
+			$(screen).prop('orientation').lock(fullscreen?'landscape':'portrait')
+		}catch(e){}
 		if(div.requestFullscreen){
 			if(!fullscreen)
 				div.requestFullscreen();
