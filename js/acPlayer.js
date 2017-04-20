@@ -440,7 +440,14 @@ $(() => {
 			bufferLayer.find('#buffer').css({
 				'left':(bufferLayer.width() - 130)/2,
 				'top':(bufferLayer.height() - 130)/2,
-			})
+			});
+			try{
+				if(fullScreenStatus()){
+					$(screen).prop('orientation').lock('landscape-primary')
+				}else{
+					$(screen).prop('orientation').unlock();
+				}
+			}catch(e){}
 		});
 
 		stopPropagation(volumeBar);
@@ -552,9 +559,6 @@ $(() => {
 	let toggleScreen = () => {
 		let div = player.get(0);
 		let fullscreen = fullScreenStatus()
-		try{
-			$(screen).prop('orientation').lock(fullscreen?'landscape':'portrait')
-		}catch(e){}
 		if(div.requestFullscreen){
 			if(!fullscreen)
 				div.requestFullscreen();
