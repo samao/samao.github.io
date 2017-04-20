@@ -206,6 +206,7 @@ $(() => {
 			'position':'absolute',
 			'top':20,
 			'left':20,
+			'background-color':'Transparent',
 		});
 		bufferLayer.find('img').css({
 			'width':75,
