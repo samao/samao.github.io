@@ -94,6 +94,20 @@ $(() => {
 	});
 	//-------danmu
 	let danmu = $(`<canvas id="danmu"></canvas>`);
+	//-------rightMenu
+	let rightMenu = $(`<div></div>`);
+	rightMenu.css({
+		'position':'fixed',
+		'left':0,
+		'top':0,
+		'width':200,
+		'background-color':'white',
+		'display':'none',
+		'text-align':'left',
+		'line-height':'20px',
+		'padding':'5px 8px',
+		'border-radius':4,
+	});
 	//-------buffer
 	let bufferLayer = $(`<div>
 			<div id="buffer">
@@ -147,6 +161,7 @@ $(() => {
 		player.append(bufferLayer);
 		player.append(pauseAnimate);
 		player.append(control);
+		player.append(rightMenu);
 		control.append(progressBar);
 		control.append(leftBox);
 		control.append(rightBox);
@@ -172,6 +187,8 @@ $(() => {
 			'position':'absolute',
 			'top':0,
 			'left':0,
+			'-webkit-filter':'drop-shadow(1px 1px 1px black)',
+			'filter':'drop-shadow(1px 1px 1px black)',
 		});
 		//-----
 		bufferLayer.css({
@@ -179,16 +196,13 @@ $(() => {
 			'height':'calc(100% - 40px)',
 			'position':'absolute',
 			'top':0,
-			'left':0,
 		});
 		bufferLayer.find('#buffer').css({
 			'width':130,
 			'height':130,
-			'margin':'auto',
+			'top':'calc(50% - 65px)',
+			'left':'calc(50% - 65px)',
 			'position':'relative',
-			'display':'table-cell',
-			'left':(bufferLayer.width() - 130)/2,
-			'top':(bufferLayer.height() - 130)/2,
 		});
 		bufferLayer.find('#circle').css({
 			'width':'100%',
@@ -196,6 +210,7 @@ $(() => {
 			'opacity':.6,
 			'border-radius':'50%',
 			'background-color':'#334f74',
+			'position':'absolute',
 		})
 		bufferLayer.find('#head').css({
 			'width':90,
@@ -233,13 +248,14 @@ $(() => {
 			'font-size':12,
 		});
 
-		inputArea.width(control.width() - rightBox.width() - togglePlayBut.width() - timelabel.width() - 130);
+		//inputArea.width(control.width() - rightBox.width() - togglePlayBut.width() - timelabel.width() - 130);
 	}
 
 	//-------左边工具
 	let leftBox = $(`<ul id="leftBox"></ul>`);
 	leftBox.css({
 		'height':'100%',
+		'width':'100%',
 		'list-style':'none',
 		'margin':0,
 		'padding':0,
@@ -342,6 +358,7 @@ $(() => {
 	let inputBar = $(`<li><input id="input" placeholder="这位爷，不发个弹幕玩玩嘛？"/></li>`)
 	inputBar.css({
 		'height':40,
+		'width':'calc(100% - 450px)',
 		'line-height':'40px',
 		'margin-left':10,
 		'float':'left',
@@ -431,22 +448,18 @@ $(() => {
 			if(inputWidth > 200){
 				inputBar.show();
 				sendBut.show();
-				inputArea.width(inputWidth);
 			}else{
 				inputBar.hide();
 				sendBut.hide();
 			}
-
-			bufferLayer.find('#buffer').css({
-				'left':(bufferLayer.width() - 130)/2,
-				'top':(bufferLayer.height() - 130)/2,
-			});
 		});
 
 		stopPropagation(volumeBar);
+		stopPropagation(bufferLayer);
 
 		video.on('contextmenu',() => false);
-		danmu.on('contextmenu',() => false);
+		bufferLayer.on('contextmenu',() => false);
+		//danmu.on('contextmenu',() => false);
 		//弹幕管理
 		let dm = new Danmaku(video,danmu,true);
 		dm.controler = new DanmaLineControler(video);
@@ -457,6 +470,41 @@ $(() => {
 		player.on('fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange',(e) => {
 			toggleUI();
 		});
+		danmu.on('contextmenu',(e) => {
+			var event = e || window.event;
+			rightMenu.css({
+				'left':event.offsetX,
+				'top':event.offsetY,
+			})
+			rightMenu.empty();
+			let vo = dm.getVoUnderPos(event.offsetX,event.offsetY);
+			if(vo){
+				rightMenu.append(`
+						<div><nobr>--复制>>${vo.text}</nobr></div>
+						<div><nobr>--屏蔽>>${vo.user}(${vo.text})</nobr></div>
+						<div><nobr>--举报>>${vo.user}(${vo.text})</nobr></div>
+						<hr style="border-color:#3333"/>
+					`)
+			}
+			rightMenu.append(`<div>AcFunH5Player: 1.0.0</div><div>网址: http://www.youtu.tv</div>`);
+			rightMenu.find('div').css({
+				'overflow':'hidden',
+				'text-overflow':'ellipsis',
+				'width':'100%',
+				'height':20,
+			})
+			rightMenu.show();
+			return false;
+		}).on('click',(e)=>{
+			rightMenu.hide();
+			togglePlayBut.trigger('click');
+		});
+
+		rightMenu.click((e)=>{
+			let event = e || window.event;
+			event.cancelBubble = true;
+		})
+
 
 		let loading = true;
 		video.on('timeupdate',() => {
@@ -464,13 +512,13 @@ $(() => {
 			var dur = digit(video.prop('duration'));
 			timelabel.html(`${cur} / ${dur}`);
 			dm.update();
-			played.width(progressBar.width() * video.prop('currentTime')/video.prop('duration'));
+			played.width(`${100 * video.prop('currentTime')/video.prop('duration')}%`);
 
 			let timeRanges = video.prop('buffered');
 			if(timeRanges.length > 0)
 			{
 				let {start,end} = timeRange();
-				loaded.width(progressBar.width() * end/video.prop('duration'));
+				loaded.width(`${100*end/video.prop('duration')}%`);
 				let range = (end - video.prop('currentTime'));
 				if(range > 20 && loading){
 					log('暂停加载',end);
@@ -513,14 +561,16 @@ $(() => {
 	        'opacity':.5,
 	        'width':120,
 	        'height':120,
-	        'margin':5,
+	        'top':5,
+	        'left':5,
 	      },1000,()=>bufferAnimate())
 	    }else{
 	      circle.animate({
 	        'opacity':.6,
 	        'width':130,
 	        'height':130,
-	        'margin':0,
+	        'top':0,
+	        'left':0,
 	      },1000,()=>bufferAnimate())
 	    }
 	    circleTo = !circleTo;
@@ -664,6 +714,7 @@ $(() => {
 			this.x = 0;
 			this.y = 0;
 			this.speed = 6;
+			this.user = '';
 		}
 		static get SIZE(){
 			return [16,25,37];
@@ -740,6 +791,10 @@ $(() => {
 		stop(){
 			this.running = false;
 			this.die = true;
+		}
+
+		toString(){
+			return `弹幕：${this.x} ${this.y} ${this.width} ${this.height} ${this.text}`
 		}
 	}
 
@@ -907,7 +962,7 @@ $(() => {
 				log('加载完毕');
 				let danmuMap = Array.from(data[2]);
 				for(let {c,m} of danmuMap){
-					let [time,color,mode,size,,,cmtid] = c.split(',');
+					let [time,color,mode,size,user,,cmtid] = c.split(',');
 					//log(`时间 ${time} 颜色 ${Number(color).toString(16)} 样式 ${mode} 字号${size} 内容:%c${m}`,`color:#${Number(color).toString(16)};`);
 					let vo = new DanmuVo();
 					vo.time = time;
@@ -916,6 +971,7 @@ $(() => {
 					vo.mode = mode;
 					vo.text = m;
 					vo.id = cmtid;
+					vo.user = user;
 					this._map.set(cmtid,vo)
 				}
 				if(this._auto){
@@ -952,6 +1008,18 @@ $(() => {
 		get currentTime(){
 			return this._video.currentTime;
 		}
+
+		getVoUnderPos(xpos,ypos){
+			for(let id of this._set){
+				let {x:left,y:top,width:width,height:height} = this._map.get(id);
+				let xDis = xpos - left;
+				let yDis = ypos - top + height;
+				if(xDis >= 0 && xDis <= width && yDis >= 0 && yDis <= height)
+					return this._map.get(id);
+			}
+			return null;
+		}
+
 		//搜索当前需要添加弹幕
 		update(){
 			if(this._video.paused) return;
