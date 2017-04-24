@@ -1,4 +1,9 @@
 $(() => {
+	//全局配置
+	const CONFIG = {
+		maxBuffer:20,
+		debug:true,
+	}
 	//------工具函数
 	const createButton = (id,imgUrl = '',text='',float = 'right') => {
 		let button = $(`<li><div id="${id}">${text}</div></li>`);
@@ -50,10 +55,9 @@ $(() => {
 		}
 		return (_hours == 0 ? ("") : (_hours < 10 ? ("0" + _hours.toString() + ":") : (_hours.toString() + ":"))) + (_mins < 10 ? ("0" + _mins.toString()) : (_mins.toString())) + ":" + (_seconds < 10 ? ("0" + _seconds.toString()) : (_seconds.toString()));
 	}
-	const debug = true;
 	//日志
 	const log = (...val) => {
-		if(debug)
+		if(CONFIG.debug)
 			console.log(`%c[H5Player]%c ${new Date().toLocaleTimeString()},${val.join(',')}`,"color:red;font-weight:bold;","color:black");
 	};
 	//获取当前缓存范围
@@ -95,21 +99,30 @@ $(() => {
 	//-------danmu
 	let danmu = $(`<canvas id="danmu"></canvas>`);
 	//-------rightMenu
-	let rightMenu = $(`<div></div>`);
+	let rightMenu = $(`<div id="menu"></div>`);
 	rightMenu.css({
 		'position':'fixed',
 		'left':0,
 		'top':0,
 		'width':200,
 		'background-color':'white',
-		'display':'none',
 		'text-align':'left',
 		'line-height':'20px',
 		'padding':'5px 8px',
 		'border-radius':4,
 	});
+	let danmuMenu = $(`<div><nobr id="text"></nobr></div>
+						<div><nobr id="block"></nobr></div>
+						<div><nobr id="report"></nobr></div>
+						<hr style="border-color:#3333;height:1px;"/>
+					`);
+	let copyMenu = $(`<div>AcFunH5Player: 1.0.0</div>
+					<div>Author:隆隆_iDzeir</div>
+					<div>Website: http://www.youtu.tv</div>
+					`);
+	rightMenu.hide();
 	//-------buffer
-	let bufferLayer = $(`<div>
+	let bufferLayer = $(`<div id="bufferLayer">
 			<div id="buffer">
 				<div id="circle"></div>
 				<div id="head">
@@ -120,7 +133,7 @@ $(() => {
 
 	//-------控制栏
 	const CONTROL_H = 40;
-	let control = $(`<div id="control"></div>`);
+	let control = $(`<div id="controlLayer"></div>`);
 	control.css({
 		'width':'100%',
 		'height':CONTROL_H + 'px',
@@ -132,7 +145,7 @@ $(() => {
 		'position':'relative',
 	});
 	const PRO_H = 4;
-	let progressBar = $(`<div><div id="loaded"></div><div id="played"></div></div>`);
+	let progressBar = $(`<div id="progressBar"><div id="loaded"></div><div id="played"></div></div>`);
 	progressBar.css({
 		'width':'100%',
 		'height':PRO_H,
@@ -161,24 +174,64 @@ $(() => {
 		player.append(bufferLayer);
 		player.append(pauseAnimate);
 		player.append(control);
-		player.append(rightMenu);
 		control.append(progressBar);
 		control.append(leftBox);
-		control.append(rightBox);
 
 		leftBox.append(togglePlayBut);
 		leftBox.append(timelabel);
 		leftBox.append(inputBar);
 		leftBox.append(sendBut);
 
-		rightBox.append(fullscreenBut);
-		rightBox.append(optBut);
-		rightBox.append(lopBut);
-		rightBox.append(volBut);
+		leftBox.append(fullscreenBut);
+		leftBox.append(optBut);
+		leftBox.append(lopBut);
+		leftBox.append(volBut);
 		volBut.append(volumeBar);
-		rightBox.append(danmuBut);
-		rightBox.append(qualityBut);
+		leftBox.append(danmuBut);
+		leftBox.append(qualityBut);
 		qualityBut.append(qualityOpt);
+
+		volumeBar.find('#volbar').slider({
+			orientation:'vertical',
+			range:'min',
+			max:1,
+			value:1,
+			step:.05,
+			animate:true,
+			slide:(evt,ui) => {
+				video.prop('volume',ui.value);
+				volumeBar.find('#volume').html(uint(100*ui.value));
+				let muted = video.prop('muted');
+				if(ui.value === 0 && !muted){
+					video.prop('muted',true);
+					volBut.find('img').attr('src',`${imgFloder}V3Mute.png`);
+				}else if(muted){
+					video.prop('muted',false);
+					volBut.find('img').attr('src',`${imgFloder}V3Volume.png`);
+				}
+			}
+		},1).css({
+			'background-color':'#ddd',
+			'border':'none',
+			'background':'#ddd',
+		});
+		volumeBar.find('.ui-slider-handle').css({
+			'width':12,
+			'height':12,
+			'border-radius':'50%',
+			'background-color':'white',
+			'margin-left':1,
+			'background':'white',
+		});
+		volumeBar.find('.ui-slider-handle').focus(function(){
+			$(this).css({
+				'outline':'none',
+			})
+		})
+		volumeBar.find('.ui-slider-range').css({
+			'background-color':'red',
+			'background':'red',
+		});
 
 		//设置统一样式
 		danmu.css({
@@ -196,6 +249,7 @@ $(() => {
 			'height':'calc(100% - 40px)',
 			'position':'absolute',
 			'top':0,
+			'pointer-events':'none',
 		});
 		bufferLayer.find('#buffer').css({
 			'width':130,
@@ -262,17 +316,6 @@ $(() => {
 		'float':'left'
 	});
 
-	//-------右边工具
-	let rightBox = $(`<ul id="rightBox"></ul>`);
-	rightBox.css({
-		'height':'100%',
-		'list-style':'none',
-		'margin':0,
-		'padding':0,
-		'position':'absolute',
-		'right':0,
-	});
-
 	//图标文件夹
 	const imgFloder = 'image/'
 
@@ -300,7 +343,7 @@ $(() => {
 	});
 
 	//音量控制
-	let volumeBar = $(`<div><span>100</span><div id="volbar"></div></div>`);
+	let volumeBar = $(`<div><span id="volume">100</span><div id="volbar"></div></div>`);
 	volumeBar.css({
 		'width':40,
 		'height':100,
@@ -324,10 +367,9 @@ $(() => {
 	})
 	volumeBar.find('div').css({
 		'width':8,
-		'background-color':'red',
 		'border-radius':3,
-		'height':80,
-		'margin':'3px 16px 0px 16px',
+		'height':70,
+		'margin':'8px 16px 0px 16px',
 	})
 	volumeBar.hide();
 
@@ -436,15 +478,19 @@ $(() => {
 		progressBar.click(e => {
 			log('seek',Number(video.prop('duration') * e.offsetX/progressBar.width()));
 			video.prop('currentTime',Number(video.prop('duration') * e.offsetX/progressBar.width()));
-			if(!loading)hls.startLoad();
+			if(!loading){
+				loading = true;
+				hls.startLoad();
+			}
 		});
+		pauseAnimate.click(()=>togglePlayBut.trigger('click'));
 
 		inputArea.focus(()=>inputArea.attr('placeholder','')).blur(()=>inputArea.attr('placeholder','这位爷，不发个弹幕玩玩嘛？'));
 
 		bufferAnimate();
 
 		$(window).resize(()=>{
-			let inputWidth = control.width() - rightBox.width() - togglePlayBut.width() - timelabel.width() - 130;
+			let inputWidth = inputArea.width();
 			if(inputWidth > 200){
 				inputBar.show();
 				sendBut.show();
@@ -455,10 +501,9 @@ $(() => {
 		});
 
 		stopPropagation(volumeBar);
-		stopPropagation(bufferLayer);
 
 		video.on('contextmenu',() => false);
-		bufferLayer.on('contextmenu',() => false);
+		//bufferLayer.on('contextmenu',() => false);
 		//danmu.on('contextmenu',() => false);
 		//弹幕管理
 		let dm = new Danmaku(video,danmu,true);
@@ -477,16 +522,15 @@ $(() => {
 				'top':event.offsetY,
 			})
 			rightMenu.empty();
+			player.append(rightMenu);
 			let vo = dm.getVoUnderPos(event.offsetX,event.offsetY);
 			if(vo){
-				rightMenu.append(`
-						<div><nobr>--复制>>${vo.text}</nobr></div>
-						<div><nobr>--屏蔽>>${vo.user}(${vo.text})</nobr></div>
-						<div><nobr>--举报>>${vo.user}(${vo.text})</nobr></div>
-						<hr style="border-color:#3333"/>
-					`)
+				danmuMenu.find('#text').text(`--复制>>${vo.text}`);
+				danmuMenu.find('#block').text(`--屏蔽>>${vo.user}(${vo.text})`);
+				danmuMenu.find('#report').text(`--举报>>${vo.user}(${vo.text})`);
+				rightMenu.append(danmuMenu);
 			}
-			rightMenu.append(`<div>AcFunH5Player: 1.0.0</div><div>网址: http://www.youtu.tv</div>`);
+			rightMenu.append(copyMenu);
 			rightMenu.find('div').css({
 				'overflow':'hidden',
 				'text-overflow':'ellipsis',
@@ -496,21 +540,22 @@ $(() => {
 			rightMenu.show();
 			return false;
 		}).on('click',(e)=>{
-			rightMenu.hide();
+			rightMenu.remove();
 			togglePlayBut.trigger('click');
 		});
 
 		rightMenu.click((e)=>{
 			let event = e || window.event;
 			event.cancelBubble = true;
+			rightMenu.remove();
 		})
 
-
 		let loading = true;
-		video.on('timeupdate',() => {
+		video.on('timeupdate',(e) => {
 			var cur = digit(video.prop('currentTime'));
 			var dur = digit(video.prop('duration'));
 			timelabel.html(`${cur} / ${dur}`);
+			
 			dm.update();
 			played.width(`${100 * video.prop('currentTime')/video.prop('duration')}%`);
 
@@ -520,19 +565,35 @@ $(() => {
 				let {start,end} = timeRange();
 				loaded.width(`${100*end/video.prop('duration')}%`);
 				let range = (end - video.prop('currentTime'));
-				if(range > 20 && loading){
-					log('暂停加载',end);
+				if(range > CONFIG.maxBuffer && loading){
+					log(`${e.type}暂停加载`,end);
 					hls.stopLoad();
 					loading = false;
 				}else{
-					if(!loading && range < 10){
-						log('恢复加载');
+					if(!loading && 2 * range <= CONFIG.maxBuffer){
+						log(`${e.type}恢复加载,${end}`);
 						loading = true;
 						hls.startLoad();
 					}
 				}
 			}
 			
+		});
+
+		video.on('durationchange',()=>{
+			var cur = digit(video.prop('currentTime'));
+			var dur = digit(video.prop('duration'));
+			timelabel.html(`${cur} / ${dur}`);
+		})
+
+		video.on('progress',(e)=>{
+			let {end} = timeRange();
+			loaded.width(`${100*end/video.prop('duration')}%`);
+			if(loading && (end - video.prop('currentTime')) > CONFIG.maxBuffer){
+				hls.stopLoad();
+				loading = false;
+				log(`${e.type}暂停加载,${end}`);
+			}
 		})
 
 		video.on('ended',() => {
@@ -547,10 +608,6 @@ $(() => {
 			//log('缓冲完成');
 			bufferLayer.hide();
 		});
-		video.on('progress',e => {
-			//console.log('progress:',e);
-		})
-
 	}
 
 	let circleTo = true
@@ -1042,6 +1099,13 @@ $(() => {
 				});
 			}
 		}
+
+		toHex(value)
+		{
+			var hexs = value.toString(16);
+			var black = "000000";
+			return (black.substring(0,black.length - hexs.length) + hexs).toLocaleUpperCase();
+		}
 		
 		//渲染弹幕
 		render(){
@@ -1064,7 +1128,7 @@ $(() => {
 			set.forEach(id =>{
 				let vo = this._map.get(id);
 				ctx.font = `${vo.size}px 微软雅黑`; //设置绘制字体  
-			    ctx.fillStyle = `#${vo.color.toString(16)}`; //设置绘制文字的颜色 
+			    ctx.fillStyle = `#${this.toHex(vo.color)}`; //设置绘制文字的颜色 
 				if(vo.running && !vo.die)
 				{
 					vo.update();
@@ -1138,11 +1202,6 @@ $(() => {
 		setupPlayer();
 		let config = {
 			debug:false,
-			maxBufferLength:10,
-			maxBufferSize:60 * 1000 * 1000,
-			maxMaxBufferLength:40,
-			enableWorker:false,
-			enableSoftwareAES:false,
 		}
 	    var hls = new Hls(config);
 	    hls.loadSource(VOD_URL);
