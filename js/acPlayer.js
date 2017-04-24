@@ -216,14 +216,13 @@ $(() => {
 			'background':'#ddd',
 		});
 		volumeBar.find('.ui-slider-handle').css({
-			'width':12,
-			'height':12,
+			'width':10,
+			'height':10,
 			'border-radius':'50%',
 			'background-color':'white',
-			'margin-left':1,
 			'background':'white',
-		});
-		volumeBar.find('.ui-slider-handle').focus(function(){
+			'margin-left':2,
+		}).focus(function(){
 			$(this).css({
 				'outline':'none',
 			})
@@ -359,6 +358,7 @@ $(() => {
 		'text-align':'center',
 		'line-height':'16px',
 		'box-sizing':'unset',
+		'display':'table-cell',
 	});
 	volumeBar.find('span').css({
 		'font-family':'微软雅黑',
@@ -369,7 +369,7 @@ $(() => {
 		'width':8,
 		'border-radius':3,
 		'height':70,
-		'margin':'8px 16px 0px 16px',
+		'margin':'8px auto',
 	})
 	volumeBar.hide();
 
