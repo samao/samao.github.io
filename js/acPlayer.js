@@ -480,7 +480,7 @@ $(() => {
 			video.prop('currentTime',Number(video.prop('duration') * e.offsetX/progressBar.width()));
 			if(!loading){
 				loading = true;
-				hls.startLoad();
+				netPause(false);
 			}
 		});
 		pauseAnimate.click(()=>togglePlayBut.trigger('click'));
@@ -567,13 +567,13 @@ $(() => {
 				let range = (end - video.prop('currentTime'));
 				if(range > CONFIG.maxBuffer && loading){
 					log(`${e.type}暂停加载`,end);
-					hls.stopLoad();
+					netPause(true);
 					loading = false;
 				}else{
 					if(!loading && 2 * range <= CONFIG.maxBuffer){
 						log(`${e.type}恢复加载,${end}`);
 						loading = true;
-						hls.startLoad();
+						netPause(false);
 					}
 				}
 			}
@@ -590,7 +590,7 @@ $(() => {
 			let {end} = timeRange();
 			loaded.width(`${100*end/video.prop('duration')}%`);
 			if(loading && (end - video.prop('currentTime')) > CONFIG.maxBuffer){
-				hls.stopLoad();
+				netPause(true);
 				loading = false;
 				log(`${e.type}暂停加载,${end}`);
 			}
@@ -608,6 +608,14 @@ $(() => {
 			//log('缓冲完成');
 			bufferLayer.hide();
 		});
+	}
+
+	//hls网络控制暂停下载
+	const netPause = bool => {
+		if(Hls.isSupported())
+		{
+			bool ? hls.stopLoad() : hls.startLoad();
+		}
 	}
 
 	let circleTo = true
@@ -1196,10 +1204,11 @@ $(() => {
 		}
 	}
 
-	const VOD_URL = /*'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8'*/"http://www.streambox.fr/playlists/test_001/stream.m3u8"
+	const VOD_URL = "http://www.streambox.fr/playlists/test_001/stream.m3u8";
 	//-------
+	setupPlayer();
+
 	if(Hls.isSupported()) {
-		setupPlayer();
 		let config = {
 			debug:false,
 		}
@@ -1210,6 +1219,7 @@ $(() => {
 	 }else{
 	 	try{
 	 		video.attr('src',VOD_URL);
+	 		setTimeout(ready,1000);
 	 	}catch(e){
 	 		player.append($(`<span style="color:#FFF">不支持的浏览器${e.toString()}</span>`))
 	 	}
