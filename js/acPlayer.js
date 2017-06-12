@@ -579,6 +579,7 @@ $(() => {
 				}
 			}
 			
+			video.get(0).controls = false;
 		});
 
 		video.on('durationchange',()=>{
