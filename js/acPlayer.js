@@ -610,7 +610,7 @@ $(() => {
 			bufferLayer.hide();
 		});
 
-		$('body').append(`<span style="color:white;"> ${navigator.userAgent} \n ${video.get(0).attributes}</span>`)
+		$('body').append(`<span style="color:white;"> ${navigator.userAgent} \n ${Array.from(video.get(0).attributes).map(e => e)}</span>`)
 	}
 
 	//hls网络控制暂停下载
