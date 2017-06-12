@@ -91,7 +91,7 @@ $(() => {
 		'color':'#999',
 	});
 	//------video jq
-	let video = $(`<video id="video"></video>`);
+	let video = $(`<video id="video" webkit-playsinline playsinline></video>`);
 	video.css({
 		'width':'100%',
 		'height':'100%',
