@@ -144,6 +144,7 @@ $(() => {
 		'border-color':'gray',
 		'overflow':'none',
 		'position':'relative',
+		'z-index':2147483646,
 	});
 	const PRO_H = 4;
 	let progressBar = $(`<div id="progressBar"><div id="loaded"></div><div id="played"></div></div>`);
