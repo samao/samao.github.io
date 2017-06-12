@@ -20,6 +20,9 @@ body{
 	color:#999;
 	opacity: 1;
 }
-video::-webkit-media-controls{
-	display:none !important;
+video::-webkit-media-controls-enclosure {
+  display:none !important;
+}
+video::-webkit-media-controls {
+  display:none !important;
 }
