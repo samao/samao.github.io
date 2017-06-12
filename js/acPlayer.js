@@ -95,6 +95,7 @@ $(() => {
 	video.css({
 		'width':'100%',
 		'height':'100%',
+		'object-fit':'contain',
 	});
 	//-------danmu
 	let danmu = $(`<canvas id="danmu"></canvas>`);
