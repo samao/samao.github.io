@@ -609,6 +609,8 @@ $(() => {
 			//log('缓冲完成');
 			bufferLayer.hide();
 		});
+
+		$('body').append(`${navigator.userAgent} \n ${video.get(0).attributes}`)
 	}
 
 	//hls网络控制暂停下载
