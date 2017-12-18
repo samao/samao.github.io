@@ -144,6 +144,7 @@ $(() => {
 		'border-color':'gray',
 		'overflow':'none',
 		'position':'relative',
+		'z-index':2147483646,
 	});
 	const PRO_H = 4;
 	let progressBar = $(`<div id="progressBar"><div id="loaded"></div><div id="played"></div></div>`);
@@ -168,13 +169,9 @@ $(() => {
 		'height':'100%',
 		'position':'absolute',
 	});
-
-	let videoCanvas = $('<canvas></canvas>');
-
 	//-------
 	function setupPlayer(){
 		player.append(video);
-		player.append(videoCanvas);
 		player.append(danmu);
 		player.append(bufferLayer);
 		player.append(pauseAnimate);
@@ -517,11 +514,6 @@ $(() => {
 
 		video.css('height','calc(100% - 40px)');
 		danmu.css('height','calc(100%-40px)');
-		videoCanvas.css({
-			'width':'100%',
-			'height':'calc(100%-40px)',
-		})
-
 		player.on('fullscreenchange mozfullscreenchange webkitfullscreenchange msfullscreenchange',(e) => {
 			toggleUI();
 		});
@@ -618,17 +610,8 @@ $(() => {
 			bufferLayer.hide();
 		});
 
-		var ctx = videoCanvas.getContext('2d');
-
-		var dvid = setInterval(()=>{
-			if(video.prop('paused')) return;
-			ctx.clearRect(0,0,video.width(),video.height());
-			ctx.drawImage(video.get(0),0,0);
-		},100)
-
-		//$('body').append(`<h3>出该域名:qiyanlong@wozine.com</h3>`)
+		$('body').append(`<span style="color:white;"> ${navigator.userAgent} </br><hr> ${Array.from(video.get(0).attributes).map(e => e.name + '=' + e.value)}</span>`)
 	}
-
 
 	//hls网络控制暂停下载
 	const netPause = bool => {
