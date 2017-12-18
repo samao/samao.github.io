@@ -937,7 +937,7 @@ $(() => {
 		}
 
 		get moveMap(){
-			var lineToal = uint(this._video.height() / Line.HEIGHT)
+			var lineToal = uint(this._video.height() / Line.HEIGHT) - 1
 			return this._moveMap;	
 		}
 
