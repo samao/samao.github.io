@@ -435,6 +435,7 @@ $(() => {
 		'background-color':'#f5f5f5',
 		'padding-left':10,
 		'height':26,
+		'line-height':26,
 		'float':'left',
 		'border':'none',
 		'margin':6,
