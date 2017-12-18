@@ -77,6 +77,8 @@ $(() => {
 
 	const PLAYER_WIDTH = '800';
 	const PLAYER_HEIGHT = '600';
+	//-------控制栏
+	const CONTROL_H = 40;
 	//------容器
 	let player = $('#acPlayer');
 	player.css({
@@ -94,7 +96,7 @@ $(() => {
 	let video = $(`<video id="video" preload="none" x-webkit-airplay="allow" webkit-playsinline playsinline="true"></video>`);
 	video.css({
 		'width':'100%',
-		'height':'100%',
+		'height':'calc(100% - CONTROL_H+"px"',
 		'object-fit':'contain',
 	});
 	//-------danmu
@@ -132,8 +134,7 @@ $(() => {
 			</div>
 		</div>`);
 
-	//-------控制栏
-	const CONTROL_H = 40;
+	
 	let control = $(`<div id="controlLayer"></div>`);
 	control.css({
 		'width':'100%',
@@ -178,8 +179,9 @@ $(() => {
 			'background-color': '#333333',
 			color:'white'
 		});
-		$('body').append('<h3>出售该域名：qiyanlong@wozine.com</h3>')
+		$('body').append('<h3 style="margin-bottom:5px;">出售该域名：qiyanlong@wozine.com</h3>')
 		$('body').append(player);
+		
 		player.append(video);
 		player.append(danmu);
 		player.append(bufferLayer);
