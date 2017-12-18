@@ -175,7 +175,7 @@ $(() => {
 		$('body').css({
 			width:'100%',
 			height:'100%',
-			background-color: '#333333',
+			'background-color': '#333333',
 			color:'white'
 		});
 		$('body').append('<h3>出售该域名：qiyanlong@wozine.com</h3>')
