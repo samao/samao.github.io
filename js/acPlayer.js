@@ -96,7 +96,7 @@ $(() => {
 	let video = $(`<video id="video" preload="none" x-webkit-airplay="allow" webkit-playsinline playsinline="true"></video>`);
 	video.css({
 		'width':'100%',
-		'height':'calc(100% - CONTROL_H+"px"',
+		'height':'calc(100% - CONTROL_H+"px")',
 		'object-fit':'contain',
 	});
 	//-------danmu
