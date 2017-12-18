@@ -80,7 +80,7 @@ $(() => {
 	//------容器
 	let player = $('#acPlayer');
 	player.css({
-		'width':PLAYER_WIDTH+'px',
+		'width':'100%',
 		'height':PLAYER_HEIGHT+'px',
 		'background-color':'black',
 		'position':'relative',
@@ -172,7 +172,13 @@ $(() => {
 	//-------
 	function setupPlayer(){
 		$('body').children().remove();
-		$('body').css('background-color','#333333');
+		$('body').css({
+			width:'100%',
+			height:'100%',
+			background-color: '#333333',
+			color:'white'
+		});
+		$('body').append('<h3>出售该域名：qiyanlong@wozine.com</h3>')
 		$('body').append(player);
 		player.append(video);
 		player.append(danmu);
