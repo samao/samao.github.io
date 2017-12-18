@@ -179,7 +179,7 @@ $(() => {
 			'background-color': '#333333',
 			color:'white'
 		});
-		$('body').append('<h3 style="margin-bottom:10px;">出售该域名：qiyanlong@wozine.com</h3>')
+		$('body').append('<h3 style="margin:10px;">出售该域名：qiyanlong@wozine.com</h3>')
 		$('body').append(player);
 		
 		player.append(video);
@@ -254,6 +254,7 @@ $(() => {
 			'left':0,
 			'-webkit-filter':'drop-shadow(1px 1px 1px black)',
 			'filter':'drop-shadow(1px 1px 1px black)',
+			'object-fit':'contain',
 		});
 		//-----
 		bufferLayer.css({
