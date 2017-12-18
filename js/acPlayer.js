@@ -75,22 +75,23 @@ $(() => {
 	const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
 
-	const PLAYER_WIDTH = '800';
+	const PLAYER_WIDTH = '900';
 	const PLAYER_HEIGHT = '600';
 	//-------控制栏
 	const CONTROL_H = 40;
 	//------容器
 	let player = $('#acPlayer');
 	player.css({
-		'width':'100%',
+		'width':PLAYER_WIDTH+'px',
 		'height':PLAYER_HEIGHT+'px',
 		'background-color':'black',
 		'position':'relative',
-		'left':0,
+		'left':'50%',
 		'top':0,
 		'font-size':'12px',
 		'font-family':'微软雅黑',
 		'color':'#999',
+		'transform':'translateX(-50%)'
 	});
 	//------video jq
 	let video = $(`<video id="video" preload="none" x-webkit-airplay="allow" webkit-playsinline playsinline="true"></video>`);
