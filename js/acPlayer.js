@@ -178,7 +178,8 @@ $(() => {
 			width:'100%',
 			height:'100%',
 			'background-color': '#333333',
-			color:'white'
+			color:'white',
+			'text-align':'center'
 		});
 		$('body').append('<h3 style="margin:10px;">出售该域名：qiyanlong@wozine.com</h3>')
 		$('body').append(player);
