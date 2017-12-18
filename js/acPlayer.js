@@ -173,6 +173,7 @@ $(() => {
 	});
 	//-------
 	function setupPlayer(){
+		document.title = '弹幕播放器测试';
 		$('body').children().remove();
 		$('body').css({
 			width:'100%',
@@ -181,7 +182,7 @@ $(() => {
 			color:'white',
 			'text-align':'center'
 		});
-		$('body').append('<h3 style="margin:10px auto;">出售该域名,<a href="mailto:qiyanlong@wozine.com"><strong color='red'>邮箱</strong></a></h3>')
+		$('body').append('<h3 style="margin:10px auto;">出售该域名,<a href="mailto:qiyanlong@wozine.com"><strong color="red">邮箱</strong></a></h3>')
 		$('body').append(player);
 		
 		player.append(video);
