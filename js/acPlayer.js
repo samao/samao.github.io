@@ -75,8 +75,8 @@ $(() => {
 	const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
 
-	const PLAYER_WIDTH = '100%';
-	const PLAYER_HEIGHT = '100%';
+	const PLAYER_WIDTH = '800';
+	const PLAYER_HEIGHT = '600';
 	//------容器
 	let player = $('#acPlayer');
 	player.css({
@@ -172,6 +172,7 @@ $(() => {
 	//-------
 	function setupPlayer(){
 		$('body').children().remove();
+		$('body').css('background-color','#333333');
 		$('body').append(player);
 		player.append(video);
 		player.append(danmu);
