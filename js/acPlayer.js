@@ -171,6 +171,8 @@ $(() => {
 	});
 	//-------
 	function setupPlayer(){
+		$('body').children().remove();
+		$('body').append(player);
 		player.append(video);
 		player.append(danmu);
 		player.append(bufferLayer);
@@ -610,7 +612,7 @@ $(() => {
 			bufferLayer.hide();
 		});
 
-		$('body').append(`<span style="color:white;"> ${navigator.userAgent} </br><hr> ${Array.from(video.get(0).attributes).map(e => e.name + '=' + e.value)}</span>`)
+		//$('body').append(`<span style="color:white;"> ${navigator.userAgent} </br><hr> ${Array.from(video.get(0).attributes).map(e => e.name + '=' + e.value)}</span>`)
 	}
 
 	//hls网络控制暂停下载
