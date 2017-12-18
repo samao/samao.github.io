@@ -627,7 +627,7 @@ $(() => {
 			ctx.drawImage(video.get(0),0,0);
 		},100)
 
-		$('body').prepend(`<h3>出该域名:qiyanlong@wozine.com</h3>`)
+		$('body').append(`<h3>出该域名:qiyanlong@wozine.com</h3>`)
 	}
 
 
