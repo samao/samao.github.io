@@ -474,9 +474,9 @@ $(() => {
 					action:'post',
 					command:JSON.stringify({
 						mode:'1',
-						color:0xFF0000,
-						size:20,
-						stime:0,
+						color:0xFFFFFF,
+						size:25,
+						stime:video.prop('currentTime'),
 						user:'1368971',
 						message:inputArea.val()
 					})
@@ -804,7 +804,9 @@ $(() => {
 			this.y = 0;
 			this.speed = 6;
 			this.user = '';
+			this.preview = false;
 		}
+
 		static get SIZE(){
 			return [16,25,37];
 		}
@@ -888,13 +890,14 @@ $(() => {
 	}
 
 	class DanmuSocket extends WebSocket{
-		constructor(vid){
+		constructor(vid, controler){
 			super(`ws://danmaku.acfun.cn:443/${vid}`);
 			super.onopen = this.onopen;
 			super.onclose = this.onclose;
 			super.onerror = this.onerror;
 			super.onmessage = this.onmessage;
 			this._vid = vid;
+			this.controler = controler;
 		}
 
 		onopen(value){
@@ -918,14 +921,30 @@ $(() => {
 			}else{
 				log('服务器消息',body.data);
 			}
+			if(response['action'] === 'post') {
+				const {stime:time,color,mode,size, message:m,commentid:cmtid,user} = JSON.parse(response.command);
+				let vo = new DanmuVo();
+				vo.time = time;
+				vo.color = color;
+				vo.size = size;
+				vo.mode = mode;
+				vo.text = m;
+				vo.id = cmtid;
+				vo.user = user;
+				vo.preview = true;
+				this.controler.add(vo)
+				log(`收到：${time}, ${color}, ${size}, ${mode}, ${m}, ${cmtid}, ${user}`);
+			}
 		}
 
 		sendAuthor(){
 			var user = {};
 			user['vid'] = this.vid;
 			user['time'] = Date.now();
-			user['uid'] = '1368971';
-			user['uid_ck'] = '1469459601';
+			user['uid'] = '1368971——';
+			user['uid_ck'] = '1092229906';
+			user['client_ck'] = '1243011615';
+			user['client'] = '157k1710269845';
 			this.send(JSON.stringify({'action':'auth',command:JSON.stringify(user)}));
 		}
 	}
@@ -1037,6 +1056,10 @@ $(() => {
 			this.run = this.run.bind(this);
 		}
 
+		add(vo) {
+			this._map.set(vo.id, vo);
+		}
+
 		set controler(value){
 			this._controler = value;
 		}
@@ -1069,7 +1092,7 @@ $(() => {
 				}
 			});
 			
-			var ws = new DanmuSocket(vid);
+			var ws = new DanmuSocket(vid,this);
 			this._ws = ws;
 		}
 
@@ -1090,8 +1113,9 @@ $(() => {
 		//发送消息
 		send(msg){
 			log('发送弹幕',msg);
-			if(this._ws)
+			if(this._ws) {
 				this._ws.send(msg);
+			}
 		}
 		//当前视频时间
 		get currentTime(){
@@ -1114,6 +1138,7 @@ $(() => {
 			if(this._video.paused) return;
 			if(this._time !== this.currentTime){
 				var addMap = Array.from(this._map.values()).filter(vo => {
+					if(vo.preview) return true;
 					if(this.currentTime > 0){
 						if(this.currentTime < this._time || (this.currentTime - this._time > 1)){
 							return false;
@@ -1167,6 +1192,7 @@ $(() => {
 					if(vo.x < -vo.width || vo.alpha <= 0){
 						//log('删除弹幕',vo.x,-ctx.measureText(vo.text).width);
 						vo.stop();
+						vo.preview = false;
 						delMap.add(vo.id);
 						if(vo.mode === DanmuVo.TOP){
 							this._topOffset -= vo.height + 10;
@@ -1175,6 +1201,12 @@ $(() => {
 						}
 					}else{
 			    		ctx.fillText(vo.text, vo.x, vo.y);
+			    		if(vo.preview) {
+			    			var bounds = ctx.measureText(vo.text);
+			    			ctx.strokeStyle = 'white';
+			    			ctx.lineWidth = 2;
+			    			ctx.strokeRect(vo.x - 4, vo.y - 24, bounds.width + 8, 30);
+			    		}
 					}
 				}else{
 					let xpos = 0,ypos = 0;
