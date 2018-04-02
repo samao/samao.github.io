@@ -1,11 +1,11 @@
-<html style="position: fixed; width: 100%; height: 100%;z-index: 999;">
+<html>
   <head>
     <meta charset="UTF-8">
     <title>H5播放器</title>
   <script type="text/javascript" src="AcH5Player.js"></script></head>
   <body>
-    <div class="player-wrap" style="width:978px;height: 626px; margin: 0 auto;"></div>
-    <script>
+    <div class="player-wrap" style="position: fixed;width:978px;height: 626px; margin: 0 auto; top:0px;"></div>
+    <script>;
       let player = AcH5Player.createPlayer(document.querySelector('.player-wrap'));
     </script>
   </body>
