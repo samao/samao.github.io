@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html>
+<html style="position: fixed; width: 100%; height: 100%;z-index: 999;">
   <head>
     <meta charset="UTF-8">
     <title>H5播放器</title>
