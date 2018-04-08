@@ -13,7 +13,6 @@
       }
       try {
         document.title = 'React Video Demo';
-        clearOther();
       }catch(e){
         console.log('错误了');
         console.log(e);
