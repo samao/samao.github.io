@@ -6,7 +6,7 @@
     <div class="player-wrap" style="position: fixed;width:978px;height: 626px; margin: 20px auto; top:0px;"></div>
     <script>;
       var player = AcH5Player.createPlayer(document.querySelector('.player-wrap'));
-      function clearOther() {
+      window.onload = function clearOther() {
         var body = document.body.querySelector('.markdown-body');
         body.removeChild(body.querySelector('h1'));
         body.removeChild(body.querySelector('.footer'));
