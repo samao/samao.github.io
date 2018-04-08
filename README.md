@@ -14,6 +14,7 @@
         document.title = 'React Video Demo';
       }catch(e){
         console.log('错误了');
+        console.log(e);
       }
     </script>
   </body>
