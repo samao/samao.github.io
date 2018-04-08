@@ -10,7 +10,7 @@
       var player = AcH5Player.createPlayer(document.querySelector('.player-wrap'));
       var body = document.body.querySelector('.markdown-body');
       try {
-        body.removeChild(body.querySelector('>h1'));
+        body.removeChild(body.querySelector('h1'));
         document.title = 'React Video Demo';
       }catch(e){
         console.log('错误了');
