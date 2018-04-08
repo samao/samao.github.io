@@ -9,7 +9,7 @@
       function clearOther() {
         var body = document.body.querySelector('.markdown-body');
         body.removeChild(body.querySelector('h1'));
-        body.removeChild(body.querySelector('footer'));
+        body.removeChild(body.querySelector('.footer'));
       }
       try {
         document.title = 'React Video Demo';
