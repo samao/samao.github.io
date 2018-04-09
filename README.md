@@ -12,7 +12,7 @@
         body.removeChild(body.querySelector('.footer'));
       }
       try {
-        document.title = 'React Video Demo - ' + H5Player.VERSION;
+        document.title = 'Video Demo - ' + H5Player.VERSION;
       }catch(e){
         console.log('错误了');
         console.log(e);
