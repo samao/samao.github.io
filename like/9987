@@ -1,4 +1,10 @@
-alCount": 9,
+{
+        "status": 200,
+        "data": {
+            "page": {
+                "pageNo": 1,
+                "pageSize": 9,
+                "totalCount": 9,
                 "list": [
                     {
                         "contentId": "ac2413242",
