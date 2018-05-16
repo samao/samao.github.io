@@ -51,6 +51,22 @@
     <script>;
       var player = H5Player.createPlayer(document.querySelector('.player-wrap'));
       document.title = "Video Demo - " + H5Player.VERSION;
+      try{
+        fetch('https://api.github.com/repos/samao/Player.H5/commits', {
+            headers: {
+                'Accept': 'application/vnd.github.symmetra-preview+json'
+            }
+        }).then(res => res.json()).then(data => {
+            return data[0]
+        }).then(last => {
+            var log = document.createElement('span');
+            log.style.paddingLeft = 30;
+            log.style.fontSize = 10;
+            log.style.color = 'red';
+            log.innerText = '更新日期：<'+last.commit.committer.date + '>  修改内容：'+last.commit.message;
+            document.querySelector('.sale').appendChild(log);
+        })
+      }catch(e){}
     </script>
   </body>
 </html>
