@@ -48,7 +48,26 @@
     <h1>H5 + React.js 播放器(pc)   <a class='source' href="#" target="_blank">源码</a></h1>
     <span class="sale">出该域名:qiyanlong@wozine.com</span>
     <div class="player-wrap"></div>
-    <script>;
+    <script>
+      (function (doc) {
+        function setCookie(key, value, exDays){
+          var d = new Date();
+          d.setTime(d.getTime() + exDays * 24 * 60 * 60 * 1000);
+          doc.cookie = key + '=' + value + '; expires=' + d.toUTCString();
+        }
+
+        var cookies = {
+          'auth_key': '1368971',
+          'auth_key_ac_sha1': '1092229906',
+          'auth_key_ac_sha1_': 'yaUni+PzvIbr2fqFRVn9tyb2Nt4=',
+          'userLevel': 22,
+          'userGroupLevel': 1
+        }
+        for (var i in cookies) {
+          setCookie(i, cookies[i], 1)
+        }
+        console.log('***** 测试用户配置OK *****');
+      })(document);
       var player = H5Player.createPlayer(document.querySelector('.player-wrap'));
       document.title = "Video Demo - " + H5Player.VERSION;
       try{
