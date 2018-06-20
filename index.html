@@ -13,8 +13,7 @@
     <title>播放器</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-    <script type="text/javascript" src="js/commons.js"></script>
-    <script type="text/javascript" src="js/H5Player.js"></script>
+    <script type="text/javascript" src="js/compat.min.js"></script>
   </head>
     <style>
       * {
@@ -68,8 +67,10 @@
         }
         console.log('***** 测试用户配置OK *****');
       })(document);
-      var player = H5Player.createPlayer(document.querySelector('.player-wrap'));
+      crPlayer('6048291', document.querySelector('.player-wrap'));
+      
       document.title = "Video Demo - " + H5Player.VERSION;
+
       try{
         fetch('https://api.github.com/repos/samao/Player.H5/commits', {
             headers: {
