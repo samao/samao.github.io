@@ -1,0 +1,40 @@
+{
+        "code": 200,
+        "data": {
+            "position": [
+                {
+                    "adzoneid": "",
+                    "createdAt": 1524121295000,
+                    "id": 163,
+                    "plid": "",
+                    "type": 0,
+                    "typeId": 98,
+                    "updatedAt": 1524121295000
+                }
+            ],
+            "content": {
+                "count": 1,
+                "list": [
+                    {
+                        "adJsscript": "",
+                        "adTag": 0,
+                        "id": 398,
+                        "image": "http://imgs.aixifan.com/cms/2018_06_15/1529050453592.jpg",
+                        "isDelete": 0,
+                        "link": "http://www.acfun.cn/sp/noahFantasy",
+                        "mediaId": 0,
+                        "mediaType": 0,
+                        "sortTime": 1529050459000,
+                        "spreadTypeId": 98,
+                        "status": 1,
+                        "title": "端午-诺亚"
+                    }
+                ],
+                "num": 1,
+                "order": -1,
+                "size": 20,
+                "start": 0
+            }
+        },
+        "message": "OK"
+    }
