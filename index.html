@@ -68,7 +68,7 @@
         console.log('***** 测试用户配置OK *****');
       })(document);
       crPlayer('6048291', document.querySelector('.player-wrap'), {
-        cb: () => {
+        cb: function() {
           console.log('创建播放成功', this)
           document.title = "播放器 - " + H5Player.VERSION;
         }
