@@ -67,7 +67,12 @@
         }
         console.log('***** 测试用户配置OK *****');
       })(document);
-      crPlayer('6048291', document.querySelector('.player-wrap'));
+      crPlayer('6048291', document.querySelector('.player-wrap'), {
+        cb: () => {
+          console.log('创建播放成功')
+          document.title = "播放器 - " + H5Player.VERSION;
+        }
+      });
       
       document.title = "播放器 - " + H5Player.VERSION;
 
