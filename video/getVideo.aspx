@@ -21,4 +21,4 @@
         "config": 0,
         "player": "youku",
         "status": 2
-    }
+}
