@@ -7,7 +7,7 @@
   <title>
     H5播放器
   </title>
-<script type="text/javascript" src="//www.youtu.tv/js/1.0.8/compat.min.js"></script></head>
+<script type="text/javascript" src="//www.youtu.tv/js/1.0.8/H5Player.15eb6a.js"></script></head>
 
 <body>
   <div id="player-test" class="player-wrap" style="width:978px;height: 626px; margin: 0px auto; background: black;"></div>
@@ -46,14 +46,16 @@
       }
     }
 
-    crPlayer({
-      vid: '6080192',
-      el: document.querySelector('.player-wrap'),
-      proxy: 'playerApi',
-      cb: function () {
-        //这里this绑定为player实例
-      }
-    });
+    H5Player.onReady((createPlayer, destryPlayer) => {});
+    
+    H5Player.createPlayer({
+        vid: '6080192',
+        el: document.querySelector('.player-wrap'),
+        proxy: 'playerApi',
+        cb: function () {
+          //这里this绑定为player实例
+        }
+      });
     //dePlayer(document.querySelector('.player-wrap'))
   </script>
 </body>
