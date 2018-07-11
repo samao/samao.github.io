@@ -8,96 +8,56 @@
     H5播放器
   </title>
 <script type="text/javascript" src="//www.youtu.tv/js/last/H5Player.js"></script></head>
-<style>
-  * {
-    margin: 0px;
-    padding: 0px;
-  }
-  .player-wrap {
-    width: 1125px;
-    height: 728px;
-    margin: 20px auto;
-  }
-  @media screen and (max-width: 1440px) {
-    .player-wrap {
-      width: 950px;
-      height:628px;
-    }
-  }
-  h1 {
-    text-align: center;
-    margin-top: 40px;
-  }
-  .sale {
-    position: fixed;
-    top:0px;
-    left:0px;
-    color:red;
-    padding: 5px;
-    font-size: 12px;
-    font-weight: bold;
-  }
-  .source {
-    font-size: 12px;
-    color: red;
-  }
-</style>
+
 <body>
-<h1>H5 + React.js 播放器(pc)   <a class='source' href="#" target="_blank">源码</a></h1>
-<span class="sale">出该域名:qiyanlong@wozine.com</span>
-<div class="player-wrap" id="react-player"></div>
-<script>
-  (function (doc) {
-    function setCookie(key, value, exDays){
-      var d = new Date();
-      d.setTime(d.getTime() + exDays * 24 * 60 * 60 * 1000);
-      doc.cookie = key + '=' + value + '; expires=' + d.toUTCString();
-    }
+  <div id="player-test" class="player-wrap" style="width:978px;height: 626px; margin: 0px auto; background: black;"></div>
+  <script>
+    //=====测试cookie
+    (function (doc) {
 
-    var cookies = {
-      'auth_key': '1368971',
-      'auth_key_ac_sha1': '1092229906',
-      'auth_key_ac_sha1_': 'yaUni+PzvIbr2fqFRVn9tyb2Nt4=',
-      'userLevel': 22,
-      'userGroupLevel': 1
-    }
-    for (var i in cookies) {
-      setCookie(i, cookies[i], 1)
-    }
-    console.log('***** 测试用户配置OK *****');
-  })(document);
-  
-  //播放器接口
-window.playerApi = {
-  f: {
-    call: function (data) {
-      console.log('[@html]', '接口调用：', JSON.stringify(data));
-    },
-    ready: function () {
-      console.log('[@html]', '播放器接口准备就绪');
-    }
-  }
-}
+      function setCookie(key, value, exDays) {
+        var d = new Date();
+        d.setTime(d.getTime() + exDays * 24 * 60 * 60 * 1000);
+        doc.cookie = key + '=' + value + '; expires=' + d.toUTCString();
+      }
 
-H5Player.onReady(() => {});
+      var cookies = {
+        'auth_key': '1368971',
+        'auth_key_ac_sha1': '1092229906',
+        'auth_key_ac_sha1_': 'yaUni+PzvIbr2fqFRVn9tyb2Nt4=',
+        'userLevel': 22,
+        'userGroupLevel': 1
+      }
+      for (var i in cookies) {
+        setCookie(i, cookies[i], 1)
+      }
+      console.log('[@html]', '***** 测试用户配置OK *****');
+    })(document);
 
-H5Player.createPlayer({
-    vid: '6080192',
-    el: document.querySelector('.player-wrap'),
-    proxy: 'playerApi',
-    cb: function () {
-      //这里this绑定为player实例
+    //播放器接口
+    window.playerApi = {
+      f: {
+        call: function (data) {
+          console.log('[@html]', '接口调用：', JSON.stringify(data));
+        },
+        ready: function () {
+          console.log('[@html]', '播放器接口准备就绪');
+        }
+      }
     }
-  });
-</script>
-<script>
-  var _hmt = _hmt || [];
-  (function() {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?7391d6450093bebbfa3ff5a289e274c2";
-    var s = document.getElementsByTagName("script")[0]; 
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
+    H5Player.onReady(function(){
+      console.log('[@html]', '播放器SDK就绪');
+    })
+    H5Player.createPlayer({
+      vid: '6080192',
+      el: document.querySelector('.player-wrap'),
+      proxy: 'playerApi',
+      cb: function () {
+        //这里this绑定为player实例
+      }
+    });
+    //H5Player.destroyPlayer(document.querySelector('.player-wrap'))
+  </script>
 </body>
+
 </html>
