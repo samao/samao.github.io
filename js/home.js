@@ -27,7 +27,7 @@
         }
       }
     }
-/*
+
     H5Player.onReady(() => {});
     
     H5Player.createPlayer({
@@ -38,7 +38,7 @@
           //这里this绑定为player实例
         }
       });
-*/
+
 
       try{
         fetch('https://api.github.com/repos/samao/Player.H5/commits', {
