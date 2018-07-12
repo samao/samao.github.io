@@ -4,7 +4,7 @@ var app = {};
 option = {
     title : {
         text: '代码构成',
-        subtext: '👌',
+        subtext: '👌.',
         x:'center'
     },
     tooltip : {
