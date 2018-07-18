@@ -13,6 +13,7 @@
         console.log('%c1、异步动态模块', li)
         console.log('%c2、webpack打包加速', li);
         console.log('%c3、模块拆分,chunkhash缓存策略', li);
+        console.log();
     })()
 
     //---写入测试cookie
