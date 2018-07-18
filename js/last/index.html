@@ -49,7 +49,9 @@
       console.log('[@html]', '播放器SDK就绪');
     })
     H5Player.createPlayer({
+      type: 'h5',
       vid: '6080192',
+      backgroundURL: 'http://imgs.aixifan.com/content/2018_07_12/1531390013.jpg',
       el: document.querySelector('.player-wrap'),
       proxy: 'playerApi',
       cb: function () {
