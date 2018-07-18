@@ -36,7 +36,7 @@
         proxy: 'playerApi',
         cb: function () {
           //这里this绑定为player实例
-        }
+        },
         type: 'h5',
         backgroundURL: 'http://imgs.aixifan.com/content/2018_07_12/1531390013.jpg',
       });
