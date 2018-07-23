@@ -13,7 +13,7 @@
         console.log('%c1、异步动态模块', li)
         console.log('%c2、webpack打包加速', li);
         console.log('%c3、模块拆分后chunkhash缓存策略', li);
-        console.log();
+        console.log('%c出售该域名：youtu.tv (on sale)', title);
     })()
 
     //---写入测试cookie
