@@ -5,7 +5,7 @@
 </head>
 <body>
 <script>
-var hash = location.hash.substr(1).split(';');
+var hash = location.hash.substr(1).split(';').map(function(s){return decodeURIComponent(s)});
 document.write(hash.join('<br />'));
 </script>
 </body>
