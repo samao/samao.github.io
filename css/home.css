@@ -1,28 +1,30 @@
 * {
-        margin: 0px;
-        padding: 0px;
-      }
-      .player-wrap {
-        width: 1125px;
-        height: 728px;
-        margin: 0 auto;
-      }
+    margin: 0px;
+    padding: 0px;
+}
 
-      #container {
-        width: 1125px;
-        height: 260px;
-        margin: 20px auto;
-        border-top: 1px solid #ddd;
-        padding: 25px 0;
-        box-sizing: border-box;
-      }
+.player-wrap {
+    width: 1125px;
+    height: 728px;
+    margin: 0 auto;
+}
 
-      @media screen and (max-width: 1440px) {
-        .player-wrap {
-          width: 950px;
-          height:628px;
-        }
-        #container {
-          width:950px;
-        }
-      }
+#container {
+    width: 1125px;
+    height: 260px;
+    margin: 20px auto;
+    border-top: 1px solid #ddd;
+    padding: 25px 0;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 1440px) {
+    .player-wrap {
+        width: 950px;
+        height: 628px;
+    }
+
+    #container {
+        width: 950px;
+    }
+}
