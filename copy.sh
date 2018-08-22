@@ -1,4 +1,4 @@
- !/bin/bash
+#!/bin/bash
 rm -r ./player
 cp -r ../H5Player/dist/ ./player
 git add *
