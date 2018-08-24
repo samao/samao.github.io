@@ -49,7 +49,8 @@
         }
     }
 
-    var kernel = 'hls'
+    var kernel = 'hls';
+    
     try{
         kernel = location.search.match(/k=([^&]+)/)[1]
     }catch(e) {
