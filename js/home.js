@@ -49,6 +49,13 @@
         }
     }
 
+    var kernel = 'hls'
+    try{
+        kernel = location.search.match(/k=([^&]+)/)[1]
+    }catch(e) {
+        kernel = 'hls';
+    }
+
     //---创建播放器
     H5Player.onReady(() => { });
     H5Player.createPlayer({
@@ -59,7 +66,7 @@
             //这里this绑定为player实例
         },
         type: 'h5',
-        kernel: 'ks',
+        kernel: kernel,
         backgroundURL: 'http://imgs.aixifan.com/content/2018_07_12/1531390013.jpg',
     });
 
