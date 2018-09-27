@@ -7,3 +7,13 @@
 		<h1>改造中，出售该域名，联系邮箱(qiyanlong@wozine.com)</h1>
 	</body>
 </html>
+
+
+fetch('http://www.acfun.cn/v2/user/content/upToken', {
+    credentials:'include',
+    headers: {
+        devicetype: '7'
+    }
+}).then(data => console.log(data.json()));
+
+
