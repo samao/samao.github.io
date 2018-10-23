@@ -25,6 +25,7 @@
 			#player-demo {
 				width: 978px;
 				height: 626px;
+				display: none;
 			}
 		</style>
 	</head>
@@ -44,6 +45,9 @@
     			onSale.style = '';
     			btn.removeEventListener('click', gotoHome);
 
+    			var player = document.querySelector('#player-demo');
+    			player.style.display = 'block';
+    			
     			H5Player.createPlayer({
 			      type: 'h5',
 			      vid: '6080192',
