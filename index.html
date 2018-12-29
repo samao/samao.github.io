@@ -1,7 +1,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>个人主页</title>
+		<title>寻找秘密入口</title>
 		<link href="favicon.png" rel="shortcut icon">
 		<style type="text/css">
 			* {
@@ -31,61 +31,14 @@
 		</style>
 	</head>
 	<body>
-		<h1 style="position: fixed;display: none; color: white;">出售该域名，联系邮箱(qiyanlong@wozine.com) </h1>
-		<div id="player-demo"></div>
 		<div class="cover-container">
 			<iframe src="cover.htm" frameborder="0" width="100%" height="100%"></iframe>
 			<div class="cover-front"></div>
 		</div>
-		<script type="text/javascript" src="player/last/H5Player.js"></script>
 		<script type="text/javascript">
-			function gotoHome(){
-				var coverBox = document.querySelector('.cover-container');
-				coverBox.remove();
-    			var onSale = document.querySelector('h1');
-    			onSale.style = '';
-    			btn.removeEventListener('click', gotoHome);
-
-    			var player = document.querySelector('#player-demo');
-    			player.style.display = 'block';
-
-    			var type = 'hls';
-    			try {
-    				type = location.search.match(/k=(.+)/)[1]
-    			}catch(e){
-    				type = 'hls'
-    			}
-    			H5Player.createPlayer({
-			      type: 'h5',
-			      vid: '6499149',
-			      backgroundURL: 'http://www.youtu.tv/images/content/2018_07_12/1531390013.jpg',
-			      el: document.querySelector('#player-demo'),
-			      proxy: 'playerApi',
-			      kernel: type,
-			      cb: function () {
-			        //这里this绑定为player实例.
-			      }
-			    });
+			onmessage = function(message) {
+				console.log(message);
 			}
-
-			//播放器接口
-		    window.playerApi = {
-		      f: {
-		        call: function (data) {
-		          console.log('[@html]', 'flash接口调用：', JSON.stringify(data));
-		        },
-		        ready: function () {
-		          console.log('[@html]', 'flash播放器接口准备就绪');
-		        }
-		      }
-		    }
-
-		    H5Player.onReady(function(){
-		      console.log('[@html]', '播放器SDK就绪');
-		    })
-
-			var btn = document.querySelector('.cover-front');
-			btn.addEventListener('click', gotoHome)
     	</script>
 
     	<script>
