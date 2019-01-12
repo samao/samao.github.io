@@ -36,15 +36,6 @@
 		<script type="text/javascript" src="player/last/H5Player.js"></script>
 		<script type="text/javascript">
 			function gotoHome(){
-				var coverBox = document.querySelector('.cover-container');
-				coverBox.remove();
-    			var onSale = document.querySelector('h1');
-    			onSale.style = '';
-    			btn.removeEventListener('click', gotoHome);
-
-    			var player = document.querySelector('#player-demo');
-    			player.style.display = 'block';
-
     			var type = 'hls';
     			try {
     				type = location.search.match(/k=(.+)/)[1]
