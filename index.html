@@ -38,8 +38,8 @@
 		</div>
 		<script type="text/javascript">
 			onmessage = function(evt) {
-				console.log(evt);
-				if(evt.origin !== "http://www.youtu.tv") {
+				if(evt.origin !== "http://www.youtu.tv" || evt.data !== 'HOHOHO') {
+					console.log('HOHOHO? WTF???');
 					return;
 				}
 				var iframe = document.getElementsByTagName('iframe')[0];
