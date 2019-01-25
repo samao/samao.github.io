@@ -37,7 +37,7 @@
 		</div>
 		<script type="text/javascript">
 			window.addEventListener('message', function(evt) {
-				if(evt.orgin === 'http://www.youtu.tv' && evt.data.action === 'getIn') {
+				if(evt.origin === 'http://www.youtu.tv' && evt.data.action === 'getIn') {
 					console.log(evt.data.data);
 					console.log('进入页面');
 					var iframe = document.getElementsByTagName('iframe')[0];
