@@ -37,12 +37,12 @@
 		</div>
 		<script type="text/javascript">
 			onmessage = function(evt) {
+				console.log(evt);
 				if(evt.origin !== "http://www.youtu.tv") {
-					console.log(evt);
 					return;
 				}
-				console.log('***', evt.data);
-				if(evt.data === 'HOHOHO') location.href = '/player.html'
+				var iframe = document.getElementsByTagName('iframe')[0];
+				if(iframe) iframe.src = '/player.html';
 			}
     	</script>
 
