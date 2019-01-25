@@ -71,7 +71,11 @@
 		      console.log('[@html]', '播放器SDK就绪');
 		    })
 
-			window.onload = gotoHome;
+			document.onreadystatechange = function() {
+				if(document.readyState === 'interactive') {
+					gotoHome();
+				}
+			}
     	</script>
 
     	<script>
