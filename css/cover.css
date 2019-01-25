@@ -43,6 +43,10 @@ li {
     animation: scale 0.8s linear alternate infinite;
 }
 
+li:nth-child(12) {
+    background-color: white;
+}
+
 @-webkit-keyframes scale {
     100% {
         -webkit-transform: scale(0.1);

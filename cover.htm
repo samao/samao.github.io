@@ -17,7 +17,7 @@
         <li></li>
         <li></li>
         <li></li>
-        <li></li>
+        <li onclick="postMessage('HOHOHO', 'http://www.youtu.tv')"></li>
         <li></li>
         <li></li>
         <li></li>
@@ -33,11 +33,5 @@
         <li></li>
       </ul>
     </div>
-    <script type="text/javascript">
-        var ul = document.querySelector('ul');
-        ul.children.item(11).addEventListener('click', function() {
-            postMessage('HOHOHO', '*');
-        })
-    </script>
   </body>
 </html>

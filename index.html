@@ -36,8 +36,13 @@
 			<div class="cover-front"></div>
 		</div>
 		<script type="text/javascript">
-			onmessage = function(message) {
-				console.log(message);
+			onmessage = function(evt) {
+				if(evt.origin !== "http://www.youtu.tv") {
+					console.log(evt);
+					return;
+				}
+				console.log('***', evt.data);
+				location.href = '/player.html'
 			}
     	</script>
 
