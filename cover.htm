@@ -17,7 +17,7 @@
         <li></li>
         <li></li>
         <li></li>
-        <li onclick="postMessage('HOHOHO', 'http://www.youtu.tv')"></li>
+        <li></li>
         <li></li>
         <li></li>
         <li></li>
@@ -33,5 +33,15 @@
         <li></li>
       </ul>
     </div>
+    <script type="text/javascript">
+        var li = document.querySelectorAll('li');
+        li.item(11).addEventListener('click', function(){
+            var HELLO_WORLD = 'FUCKING HACKER!!!';
+            top.postMessage({
+                action: 'getIn',
+                data: 'HELLO_WORLD'
+            }, 'http://www.youtu.tv');
+        })
+    </script>
   </body>
 </html>
