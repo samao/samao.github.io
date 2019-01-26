@@ -17,6 +17,7 @@ ul {
     grid-template-columns: repeat(5, 1fr);
     -webkit-animation: rot 16s linear infinite;
     animation: rot 16s linear infinite;
+    list-style: none;
 }
 
 @-webkit-keyframes rot {
