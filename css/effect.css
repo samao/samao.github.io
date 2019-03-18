@@ -1,0 +1,92 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+a,
+a:focus,
+a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #333;
+  text-shadow: none;
+  background-color: #fff;
+  border: .05rem solid #fff;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  color: #fff;
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+}
+
+#reveal-effect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  /* transition: all 5s; */
+}
+
+body {
+  background: #fff;
+}
+
+body.loaded {
+  background-color: #333333;
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+}
+
+body.loaded #page {
+  visibility: visible;
+  width: 100%;
+}
+
+body.loaded #reveal-effect {
+  opacity: 1;
+}
+
+body.revealed #reveal-effect {
+  display: none;
+}
+
+header {
+  height: 100px;
+}
+
+header nav {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+header nav > a {
+  height: 60px;
+  line-height: 60px;
+  box-sizing: border-box;
+  font-size: 30px;
+  font-weight: bold;
+  transition: all 300ms;
+}
+
+header nav > a:hover {
+  color: red;
+}
+
+header nav > a:not(:last-child) {
+  margin-right: 30px;
+}
+
