@@ -39,11 +39,13 @@
         ul.addEventListener('click', function(e){
             if(e.target instanceof HTMLLIElement) {
                 var toUrl = e.target.getAttribute('title');
-                top.postMessage({
-                    action: 'getIn',
-                    data: 'FUCKING HACKER',
-                    toUrl: toUrl
-                }, location.protocol + '//www.youtu.tv');
+                if(toUrl) {
+                    top.postMessage({
+                        action: 'getIn',
+                        data: 'FUCKING HACKER',
+                        toUrl: toUrl
+                    }, location.protocol + '//www.youtu.tv');
+                }
             }
         })
     </script>
