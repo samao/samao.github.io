@@ -39,7 +39,7 @@
 			window.addEventListener('message', function(evt) {
 				if(evt.origin === location.protocol + '//www.youtu.tv' && evt.data.action === 'getIn') {
 					console.log(evt.data.data);
-					console.log('进入页面');
+					console.log('进入页面', evt.data);
 					var iframe = document.getElementsByTagName('iframe')[0];
 					if(iframe) iframe.src = '/'+evt.data.toUrl+'.html';
 				}
