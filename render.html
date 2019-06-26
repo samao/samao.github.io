@@ -50,12 +50,17 @@
                 cursor: pointer;
             }
 
-            .root .blocked {
+            .root ul li input[type=number] {
+                width: 60px;
+                margin-right: 5px;
+            }
+
+            .root .flex {
                 display: flex;
                 align-items: center;
             }
 
-            .root .blocked label {
+            .root .flex label {
                 margin: 0 10px;
             }
 
@@ -63,7 +68,7 @@
     </head>
     <body>
         <div class='root'>
-            <video muted autoplay loop preload="metadata"></video>
+            <video muted autoplay loop preload="metadata" src='http://test.qie.tv:8080/stream/live.mp4'></video>
             <div class="danmu-container" onclick="toggle()" ></div>
             <ul>
                 <li>
@@ -72,7 +77,7 @@
                 <li>
                     <button onclick="createCore('canvas')">canvas渲染</button>
                 </li>
-                <li class='blocked'>
+                <li class='flex blocked'>
                     <label for="move">滚动</label>
                     <input type="checkbox" name="blocked" id='move' checked>
                     <label for="top">顶部</label>
@@ -80,10 +85,16 @@
                     <label for="bottom">底部</label>
                     <input type="checkbox" name="blocked" id="bottom" checked>
                 </li>
+                <li class='flex'>
+                    添加力度：
+                    <input id='dps' onchange="change()" type="number" min="2" max="120" value="10">
+                    条/秒
+                </li>
             </ul>
         </div>
         <script>
-            var render, id = 0, task;
+            document.title += '|' + DanmuRender.version;
+            var render, id = 0, task, delay = 100;
 
             var blocked = {
                 move: false,
@@ -93,9 +104,10 @@
             var blockeds = document.querySelector('.blocked');
 
             function createCore(type) {
+                document.querySelector('#dps').value = 1000 / delay;
                 if(render) {
                     render.destroy();
-                    clearInterval(task);
+                    clearTimeout(task);
                 }
                 render = new DanmuRender({
                     islive: true,
@@ -108,8 +120,13 @@
                 start();
             }
 
+            function change(e) {
+                var num = document.querySelector('#dps').value;
+                delay = Math.round(1000 / parseInt(num));
+            }
+
             function start() {
-                return task = setInterval(function addDanmu() {
+                task = setTimeout(function addDanmu() {
                     var mode = 'move';
                     var ran = Math.random();
                     if(ran < 0.3) mode = 'top';
@@ -121,8 +138,9 @@
                         mode,
                         time: 0,
                         message: '测试弹幕'+((Math.random()*100000000)|0)
-                    })
-                }, 100);
+                    });
+                    start();
+                }, delay);
             }
 
             function toggle() {
@@ -138,7 +156,7 @@
                 }
             }
 
-            blockeds.addEventListener('click', function(e) {
+            blockeds.addEventListener('click', (e) => {
                 if(e.target instanceof HTMLInputElement) {
                     Object.assign(blocked, {[e.target.id]: !e.target.checked});
                     if(render) {
