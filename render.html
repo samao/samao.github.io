@@ -138,7 +138,7 @@
                 }
             }
 
-            blockeds.addEventListener('click', (e) => {
+            blockeds.addEventListener('click', function(e) {
                 if(e.target instanceof HTMLInputElement) {
                     Object.assign(blocked, {[e.target.id]: !e.target.checked});
                     if(render) {
@@ -148,17 +148,17 @@
             })
 
             //播放视频
--            if (flvjs.isSupported()) {
--                var videoElement = document.querySelector('video');
--                var flvPlayer = flvjs.createPlayer({
--                    islive: true,
--                    type: 'flv',
--                    url: './streams/live.flv'
--                });
--                flvPlayer.attachMediaElement(videoElement);
--                flvPlayer.load();
--                flvPlayer.play();
--            }
+           if (flvjs.isSupported()) {
+                var videoElement = document.querySelector('video');
+                var flvPlayer = flvjs.createPlayer({
+                    islive: true,
+                    type: 'flv',
+                    url: './streams/live.flv'
+                });
+                flvPlayer.attachMediaElement(videoElement);
+                flvPlayer.load();
+                flvPlayer.play();
+            }
 
             createCore('canvas');
         </script>
