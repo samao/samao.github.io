@@ -86,10 +86,11 @@
                     <input type="checkbox" name="blocked" id="bottom" checked>
                 </li>
                 <li class='flex'>
-                    添加力度：
+                    力度：
                     <input id='dps' onchange="change()" type="number" min="2" max="120" value="10">
                     条/秒
                 </li>
+                <li class='flex density' />
             </ul>
         </div>
         <script>
@@ -102,9 +103,10 @@
                 bottom: false
             }
             var blockeds = document.querySelector('.blocked');
+            var density = document.querySelector('.density');
 
             function createCore(type) {
-                document.querySelector('#dps').value = 1000 / delay;
+                document.querySelector('#dps').value = Math.floor(1000 / delay);
                 if(render) {
                     render.destroy();
                     clearTimeout(task);
@@ -139,6 +141,7 @@
                         time: 0,
                         message: '测试弹幕'+((Math.random()*100000000)|0)
                     });
+                    density.innerText = '同屏密度：' + render.density;
                     start();
                 }, delay);
             }
