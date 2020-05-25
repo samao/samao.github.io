@@ -1,6 +1,6 @@
 {
         "encode": "2_1523415945_86479d88401f78045c7957e64037f489",
-        "sourceId": "/www.youtu.tv/streams/x36xhzz/x36xhzz",
+        "sourceId": "/stream.youtu.tv/streams/x36xhzz/x36xhzz",
         "contentId": 4300820,
         "allowDanmaku": 0,
         "title": "Part1",
