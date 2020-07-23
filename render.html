@@ -141,7 +141,7 @@
                     if(ran < 0.3) mode = 'top';
                     if(ran < 0.2) mode = 'bottom';
                     var idx = Math.ceil(Math.random() * 6);
-                    var isColors = mode === 'move' && Math.random() > 0.15;
+                    var isColors = mode === 'move' && Math.random() < 0.15;
 
                     render.add({
                         id: id++,
