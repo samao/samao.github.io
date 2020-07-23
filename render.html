@@ -139,13 +139,24 @@
                     var ran = Math.random();
                     if(ran < 0.3) mode = 'top';
                     if(ran < 0.2) mode = 'bottom';
+                    var idx = Math.ceil(Math.random() * 6);
+                    var isColors = mode === 'move' && Math.random() > 0.15;
+
                     render.add({
                         id: id++,
-                        color: Math.random() * 0xffffff |0,
+                        color: isColors ? idx : Math.random() * 0xffffff |0,
                         size: ((Math.random() * 20)|0) + 14,
                         mode,
                         time: 0,
-                        message: '测试弹幕'+((Math.random()*100000000)|0)
+                        message: Mock.Random.csentence(3,15),
+                        background: isColors ? {
+                            headImg: '/images/colors/' + idx + '_head.png',
+                            headImg: '/images/colors/' + idx + '_body.png',
+                            headImg: '/images/colors/' + idx + '_tail.png',
+                        } : undefined,
+                        from: {
+                            n: Mock.Random.cname()
+                        }
                     });
                     density.innerText = '同屏密度：' + render.density;
                     start();
