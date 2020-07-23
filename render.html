@@ -75,7 +75,7 @@
     </head>
     <body>
         <div class='root'>
-            <video muted autoplay loop preload="metadata" src='http://test.qie.tv:8080/stream/live.mp4'></video>
+            <video muted autoplay loop preload="metadata"></video>
             <div class="danmu-container" onclick="toggle()" ></div>
             <ul>
                 <li>
@@ -192,7 +192,7 @@
                 var flvPlayer = flvjs.createPlayer({
                     islive: true,
                     type: 'flv',
-                    url: '//stream.youtu.tv/videos/live.flv'
+                    url: '/stream/live.flv'
                 });
                 flvPlayer.attachMediaElement(videoElement);
                 flvPlayer.load();
