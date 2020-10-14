@@ -133,6 +133,8 @@
             function change(e) {
                 var num = document.querySelector('#dps').value;
                 delay = Math.round(1000 / parseInt(num));
+                clearTimeout(task);
+                start();
             }
 
             function start() {
