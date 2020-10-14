@@ -1,6 +1,6 @@
 {
         "encode": "2_1523415945_86479d88401f78045c7957e64037f489",
-        "sourceId": "/stream.youtu.tv/streams/hls/master",
+        "sourceId": "/stream.youtu.tv/stream/hls/master",
         "contentId": 4300820,
         "allowDanmaku": 0,
         "title": "Part1",
