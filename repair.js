@@ -28,7 +28,18 @@ const danmu = Array.from({ length: size }, () => {
   };
 });
 
-const danmuStream = fs.createWriteStream(
-  path.join(__dirname, "V4", "9527_2", "8888", "500")
-);
-danmuStream.write(JSON.stringify([[], [], danmu]));
+console.log('生成弹幕', danmu.length);
+
+let pageNo = 1;
+while (danmu.length) {
+  const pageDanmus = danmu.splice(0, 500);
+  console.log('PAGE_NO', pageNo, pageDanmus.length);
+  try {
+    fs.mkdirSync(path.join(__dirname, "V4", "9527_2", pageNo.toString()));
+  }catch{}
+  const danmuStream = fs.createWriteStream(
+    path.join(__dirname, "V4", "9527_2", pageNo.toString(), "500")
+  );
+  danmuStream.write(JSON.stringify([[], [], pageDanmus]));
+  pageNo++;
+}
