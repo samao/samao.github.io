@@ -213,7 +213,7 @@
             });
 
             //播放视频
-            if (Hls.isSupported() && location.search.indexOf('flv') !== -1) {
+            if (Hls.isSupported() && location.search.indexOf('flv') === -1) {
                 var videoElement = document.querySelector("video");
                 var hls = new Hls({
                     maxBufferSize: 100 * 1024 * 1024,
