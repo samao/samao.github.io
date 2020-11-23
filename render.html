@@ -4,6 +4,7 @@
         <title>弹幕DEMO测试</title>
         <meta charset="utf-8" />
         <script type="text/javascript" src="js/flv.min.js"></script>
+        <script type="text/javascript" src="js/hls.min.js"></script>
         <script type="text/javascript" src="js/mock-min.js"></script>
         <script type="text/javascript" src="js/danmu-render.min.js"></script>
         <style>
@@ -212,7 +213,22 @@
             });
 
             //播放视频
-            if (flvjs.isSupported()) {
+
+            if (Hls.isSupported()) {
+                var videoElement = document.querySelector("video");
+                var hls = new Hls({
+                    maxBufferSize: 100 * 1024 * 1024,
+                    maxMaxBufferLength: 20,
+                    autoStartLoad: false,
+                    startLevel: 0,
+                    enableWorker: true
+                });
+                hls.loadSource('/stream/hls/master.m3u8');
+                hls.attachMedia(videoElement);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } else if (flvjs.isSupported()) {
                 var videoElement = document.querySelector("video");
                 var flvPlayer = flvjs.createPlayer(
                     {
