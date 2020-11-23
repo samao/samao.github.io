@@ -1,8 +1,8 @@
-<!DOCTYPE>
+<!DOCTYPE >
 <html lang="en">
     <head>
         <title>弹幕DEMO测试</title>
-        <meta charset="utf-8">
+        <meta charset="utf-8" />
         <script type="text/javascript" src="js/flv.min.js"></script>
         <script type="text/javascript" src="js/mock-min.js"></script>
         <script type="text/javascript" src="js/danmu-render.min.js"></script>
@@ -13,7 +13,7 @@
             * {
                 padding: 0;
                 margin: 0;
-                box-sizing:border-box;
+                box-sizing: border-box;
             }
             :focus {
                 outline: none;
@@ -58,7 +58,7 @@
                 cursor: pointer;
             }
 
-            .root ul li input[type=number] {
+            .root ul li input[type="number"] {
                 width: 60px;
                 margin-right: 5px;
             }
@@ -71,13 +71,12 @@
             .root .flex label {
                 margin: 0 10px;
             }
-
         </style>
     </head>
     <body>
-        <div class='root'>
+        <div class="root">
             <video muted autoplay loop preload="metadata"></video>
-            <div class="danmu-container" onclick="toggle()" ></div>
+            <div class="danmu-container" onclick="toggle()"></div>
             <ul>
                 <li>
                     <button onclick="createCore('css')">css渲染</button>
@@ -85,58 +84,68 @@
                 <li>
                     <button onclick="createCore('canvas')">canvas渲染</button>
                 </li>
-                <li class='flex blocked'>
+                <li class="flex blocked">
                     <label for="move">滚动</label>
-                    <input type="checkbox" name="blocked" id='move' checked>
+                    <input type="checkbox" name="blocked" id="move" checked />
                     <label for="top">顶部</label>
-                    <input type="checkbox" name="blocked" id="top" checked>
+                    <input type="checkbox" name="blocked" id="top" checked />
                     <label for="bottom">底部</label>
-                    <input type="checkbox" name="blocked" id="bottom" checked>
+                    <input type="checkbox" name="blocked" id="bottom" checked />
                 </li>
                 <li class="flex">
                     <label for="color">彩色</label>
-                    <input type="checkbox" id="color">
+                    <input type="checkbox" id="color" />
                 </li>
-                <li class='flex'>
+                <li class="flex">
                     力度：
-                    <input id='dps' onchange="change()" type="number" min="2" max="120" value="10">
+                    <input
+                        id="dps"
+                        onchange="change()"
+                        type="number"
+                        min="2"
+                        max="120"
+                        value="10"
+                    />
                     条/秒
                 </li>
-                <li class='flex density' />
+                <li class="flex density" />
             </ul>
         </div>
         <script>
-            document.title += '|' + DanmuRender.version;
-            var render, id = 0, task, delay = 100;
+            document.title += "|" + DanmuRender.version;
+            var render,
+                id = 0,
+                task,
+                delay = 100;
 
             var blocked = {
                 move: false,
                 top: false,
-                bottom: false
-            }
-            var blockeds = document.querySelector('.blocked');
-            var density = document.querySelector('.density');
-            var color = document.querySelector('#color')
+                bottom: false,
+            };
+            var blockeds = document.querySelector(".blocked");
+            var density = document.querySelector(".density");
+            var color = document.querySelector("#color");
 
             function createCore(type) {
-                document.querySelector('#dps').value = Math.floor(1000 / delay);
-                if(render) {
+                document.querySelector("#dps").value = Math.floor(1000 / delay);
+                if (render) {
                     render.destroy();
                     clearTimeout(task);
                 }
                 render = new DanmuRender({
                     islive: true,
                     renderType: type,
-                    video: document.querySelector('video'),
-                    container: document.querySelector('.danmu-container'),
-                    autoStart: true
+                    video: document.querySelector("video"),
+                    container: document.querySelector(".danmu-container"),
+                    autoStart: true,
                 });
                 render.blockedType = blocked;
                 start();
             }
 
             function change(e) {
-                var num = document.querySelector('#dps').value;
+                var num = document.querySelector("#dps").value;
                 delay = Math.max(16, Math.round(1000 / parseInt(num)));
                 clearTimeout(task);
                 start();
@@ -144,39 +153,43 @@
 
             function start() {
                 var useColor = color.checked;
-                console.log('当前间隔', delay, '彩色弹幕', useColor);
+                console.log("当前间隔", delay, "彩色弹幕", useColor);
                 task = setTimeout(function addDanmu() {
-                    var mode = 'move';
+                    var mode = "move";
                     var ran = Math.random();
-                    if(ran < 0.3) mode = 'top';
-                    if(ran < 0.2) mode = 'bottom';
+                    if (ran < 0.3) mode = "top";
+                    if (ran < 0.2) mode = "bottom";
                     var idx = Math.ceil(Math.random() * 6);
-                    var isColors = useColor ? (mode === 'move' && Math.random() < 0.15) : false;
+                    var isColors = useColor
+                        ? mode === "move" && Math.random() < 0.15
+                        : false;
 
                     render.add({
                         id: id++,
-                        color: isColors ? idx : Math.random() * 0xffffff |0,
+                        color: isColors ? idx : (Math.random() * 0xffffff) | 0,
                         size: 26,
                         mode,
                         time: 0,
-                        message: Mock.Random.csentence(3,15),
-                        background: isColors ? {
-                            headImg: 'images/colors/' + idx + '_head.png',
-                            bodyImg: 'images/colors/' + idx + '_body.png',
-                            tailImg: 'images/colors/' + idx + '_tail.png',
-                        } : undefined,
+                        message: Mock.Random.csentence(3, 15),
+                        background: isColors
+                            ? {
+                                  headImg: "images/colors/" + idx + "_head.png",
+                                  bodyImg: "images/colors/" + idx + "_body.png",
+                                  tailImg: "images/colors/" + idx + "_tail.png",
+                              }
+                            : undefined,
                         from: {
-                            n: Mock.Random.cname()
-                        }
+                            n: Mock.Random.cname(),
+                        },
                     });
-                    density.innerText = '同屏密度：' + render.density;
+                    density.innerText = "同屏密度：" + render.density;
                     start();
                 }, delay);
             }
 
             function toggle() {
-                var video = document.querySelector('video');
-                if(video.paused) {
+                var video = document.querySelector("video");
+                if (video.paused) {
                     video.play();
                     render.resume();
                     start();
@@ -187,29 +200,38 @@
                 }
             }
 
-            blockeds.addEventListener('click', (e) => {
-                if(e.target instanceof HTMLInputElement) {
-                    Object.assign(blocked, {[e.target.id]: !e.target.checked});
-                    if(render) {
+            blockeds.addEventListener("click", (e) => {
+                if (e.target instanceof HTMLInputElement) {
+                    Object.assign(blocked, {
+                        [e.target.id]: !e.target.checked,
+                    });
+                    if (render) {
                         render.blockedType = blocked;
                     }
                 }
-            })
+            });
 
             //播放视频
-           if (flvjs.isSupported()) {
-                var videoElement = document.querySelector('video');
-                var flvPlayer = flvjs.createPlayer({
-                    islive: true,
-                    type: 'flv',
-                    url: 'stream/live.flv'
-                }, {enableWorker: true, deferLoadAfterSourceOpen: true, fixAudioTimestampGap: false });
+            if (flvjs.isSupported()) {
+                var videoElement = document.querySelector("video");
+                var flvPlayer = flvjs.createPlayer(
+                    {
+                        islive: true,
+                        type: "flv",
+                        url: "/stream/live.flv",
+                    },
+                    {
+                        enableWorker: true,
+                        deferLoadAfterSourceOpen: true,
+                        fixAudioTimestampGap: false,
+                    }
+                );
                 flvPlayer.attachMediaElement(videoElement);
                 flvPlayer.load();
                 flvPlayer.play();
             }
 
-            createCore('canvas');
+            createCore("canvas");
         </script>
     </body>
 </html>
