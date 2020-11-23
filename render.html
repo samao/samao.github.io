@@ -202,8 +202,8 @@
                 var flvPlayer = flvjs.createPlayer({
                     islive: true,
                     type: 'flv',
-                    url: '/stream/live.flv'
-                });
+                    url: 'stream/live.flv'
+                }, {enableWorker: true, deferLoadAfterSourceOpen: true, fixAudioTimestampGap: false });
                 flvPlayer.attachMediaElement(videoElement);
                 flvPlayer.load();
                 flvPlayer.play();
