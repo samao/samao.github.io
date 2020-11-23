@@ -231,6 +231,7 @@
                 var videoElement = document.querySelector("video");
                 var flvPlayer = flvjs.createPlayer(
                     {
+                        debug: true,
                         islive: true,
                         type: "flv",
                         url: location.origin + "/stream/live.flv",
