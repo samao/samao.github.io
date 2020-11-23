@@ -3,9 +3,9 @@
     <head>
         <title>弹幕DEMO测试</title>
         <meta charset="utf-8">
-        <script type="text/javascript" src="/js/flv.min.js"></script>
-        <script type="text/javascript" src="/js/mock-min.js"></script>
-        <script type="text/javascript" src="/js/danmu-render.min.js"></script>
+        <script type="text/javascript" src="js/flv.min.js"></script>
+        <script type="text/javascript" src="js/mock-min.js"></script>
+        <script type="text/javascript" src="js/danmu-render.min.js"></script>
         <style>
             body {
                 -webkit-font-smoothing: antialiased;
@@ -93,6 +93,10 @@
                     <label for="bottom">底部</label>
                     <input type="checkbox" name="blocked" id="bottom" checked>
                 </li>
+                <li class="flex">
+                    <label for="color">彩色</label>
+                    <input type="checkbox" id="color">
+                </li>
                 <li class='flex'>
                     力度：
                     <input id='dps' onchange="change()" type="number" min="2" max="120" value="10">
@@ -112,6 +116,7 @@
             }
             var blockeds = document.querySelector('.blocked');
             var density = document.querySelector('.density');
+            var color = document.querySelector('#color')
 
             function createCore(type) {
                 document.querySelector('#dps').value = Math.floor(1000 / delay);
@@ -132,19 +137,21 @@
 
             function change(e) {
                 var num = document.querySelector('#dps').value;
-                delay = Math.round(1000 / parseInt(num));
+                delay = Math.max(16, Math.round(1000 / parseInt(num)));
                 clearTimeout(task);
                 start();
             }
 
             function start() {
+                var useColor = color.checked;
+                console.log('当前间隔', delay, '彩色弹幕', useColor);
                 task = setTimeout(function addDanmu() {
                     var mode = 'move';
                     var ran = Math.random();
                     if(ran < 0.3) mode = 'top';
                     if(ran < 0.2) mode = 'bottom';
                     var idx = Math.ceil(Math.random() * 6);
-                    var isColors = mode === 'move' && Math.random() < 0.15;
+                    var isColors = useColor ? (mode === 'move' && Math.random() < 0.15) : false;
 
                     render.add({
                         id: id++,
@@ -154,9 +161,9 @@
                         time: 0,
                         message: Mock.Random.csentence(3,15),
                         background: isColors ? {
-                            headImg: '/images/colors/' + idx + '_head.png',
-                            bodyImg: '/images/colors/' + idx + '_body.png',
-                            tailImg: '/images/colors/' + idx + '_tail.png',
+                            headImg: 'images/colors/' + idx + '_head.png',
+                            bodyImg: 'images/colors/' + idx + '_body.png',
+                            tailImg: 'images/colors/' + idx + '_tail.png',
                         } : undefined,
                         from: {
                             n: Mock.Random.cname()
