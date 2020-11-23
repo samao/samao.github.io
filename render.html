@@ -225,7 +225,7 @@
                 hls.loadSource('/stream/hls/master.m3u8');
                 hls.attachMedia(videoElement);
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play();
+                    videoElement.play();
                 });
             } else if (flvjs.isSupported()) {
                 var videoElement = document.querySelector("video");
