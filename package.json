@@ -4,7 +4,8 @@
   "description": "",
   "main": "repair.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:profile": "concurrently \"pug -w profile/src/index.pug --out profile/\"  \"stylus -w profile/src/index.stylus -o profile/index.css\"",
+    "build:profile": "pug profile/src/index.pug --out profile/ && stylus profile/src/index.stylus -o profile/index.css"
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,9 @@
   "homepage": "https://github.com/samao/samao.github.io#readme",
   "dependencies": {
     "mockjs": "^1.1.0"
+  },
+  "devDependencies": {
+    "pug-cli": "^1.0.0-alpha6",
+    "stylus": "^0.54.8"
   }
 }

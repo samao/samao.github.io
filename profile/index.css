@@ -1,0 +1,72 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.app {
+  position: relative;
+  width: 100vw;
+  font-size: 1.866666666666667vw;
+  padding: 2.666666666666667vw;
+  line-height: 4vw;
+  color: #333;
+}
+.app .td,
+.app li {
+  font-size: 1.866666666666667vw;
+}
+.app .blue {
+  color: #4395ff;
+}
+.app > section {
+  margin-bottom: 4vw;
+}
+.app hr {
+  border: 0.133333333333333vw dashed #eee;
+  margin-bottom: 1.333333333333333vw;
+}
+.app i {
+  margin: 0 1.333333333333333vw;
+}
+.app h1 {
+  line-height: 5.333333333333334vw;
+}
+.app .profile {
+  width: 100%;
+  border-collapse: collapse;
+}
+.app .profile td {
+  border: 0.133333333333333vw dashed #999;
+  padding: 0 0.666666666666667vw;
+}
+.app .profile td.icon {
+  width: 4vw;
+  height: 4vw;
+  flex: none;
+}
+.app .profile td.middle {
+  display: none;
+  color: #333;
+  justify-content: center;
+  flex: none;
+}
+.app .wanted {
+  list-style: none;
+  display: flex;
+}
+.app .wanted >li {
+  margin-right: 6.666666666666667vw;
+}
+.app .exp h4 span {
+  margin-left: 6.666666666666667vw;
+}
+.app .exp > ul {
+  display: flex;
+  list-style: none;
+}
+.app .exp > ul >li {
+  margin-right: 4vw;
+}
+.app .exp > ul >li strong {
+  margin-right: 1.333333333333333vw;
+}
