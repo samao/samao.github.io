@@ -1,0 +1,15 @@
+{
+    "code": 200,
+    "message": "SUCCESS",
+    "result": {
+        "videos": [
+            {
+                "key": "stream/hls/master.m3u8",
+                "clear": 99,
+                "width": 3840,
+                "height": 2160,
+                "host": "http://vod.qiecdn.com/"
+            }
+        ]
+    }
+}
