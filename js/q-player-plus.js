@@ -3,7 +3,7 @@
     QiePlayer.createPlayer({
         ...config,
         vid: config.rid,
-        cdn: "//localhost:12345",
+        cdn: "//www.youtu.tv",
         cmsCDN: "/cms",
         payment: "",
         el: document.querySelector("#__next"),
