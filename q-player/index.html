@@ -4,9 +4,35 @@
         <title>Q-Player</title>
         <script src="/js/log.min.js"></script>
         <script src="/nextStatic/js/player/3.8.3/qie.player.js"></script>
+        <link href="favicon.png" rel="shortcut icon">
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: #e6e6e6;
+			}
+			
+			#__next {
+				width: 968px;
+				height: 626px;
+				display: block;
+				margin: 0 auto;
+				filter: drop-shadow(2px 2px 3px black);
+			}
+
+            .webfulled {
+                width: 100% !important;
+                height: 100% !important;
+            }
+		</style>
     </head>
     <body>
-        <div id="__next" class="player-wrap" style="width:1110px;height: 625px; margin: 0px auto; background: black;"></div>
+        <div id="__next" class="player-wrap"></div>
         <script src="/js/q-player-plus.js"></script>
     </body>
 </html>
