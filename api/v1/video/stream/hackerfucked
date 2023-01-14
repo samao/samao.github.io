@@ -7,13 +7,13 @@
                 "key": "stream/hls/0/index.m3u8",
                 "clear": 88,
                 "width": 960,
-                "height": 540,
+                "height": 540
             },
             {
                 "key": "stream/hls/1/index.m3u8",
                 "clear": 99,
                 "width": 1920,
-                "height": 1080,
+                "height": 1080
             }
         ]
     }
