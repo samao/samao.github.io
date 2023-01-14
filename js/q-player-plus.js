@@ -43,15 +43,18 @@
         // plugins: ["banner"],
         loader: {
             vod(video_id) {
-                console.log("拉取VOD", video_id);
+                // console.log("拉取VOD", video_id);
                 return Promise.resolve({
                     error: 0,
-                    msg: "\u83b7\u53d6\u6210\u529f",
-
                     video_info: {
-                        id: "1285892",
-                        stream_name: "hackerfucked",
-                    },
+                        "stream_name": "hackerfucked",
+                        "user_info": {
+                          "nickname": "黑客是撒币",
+                          "user_pic": "https://tx-free-imgs2.acfun.cn/kimg/bs2/zt-image-host/ChYwOGFhYTc4YzRmMTBjNmU1OTVhZTA2EJvM1y8.webp",
+                          "room_id": "#",
+                          "follow_state": 1
+                        }
+                      },
                 });
             },
         },
