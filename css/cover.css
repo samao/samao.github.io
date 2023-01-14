@@ -44,8 +44,8 @@ li {
     animation: scale 0.8s linear alternate infinite;
 }
 
-li:nth-child(12) {
-
+li:not([title]) {
+    opacity: 0.6;
 }
 
 @-webkit-keyframes scale {

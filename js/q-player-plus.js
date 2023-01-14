@@ -50,7 +50,7 @@
 
                     video_info: {
                         id: "1285892",
-                        stream_name: "3106510kcee11d",
+                        stream_name: "hackerfucked",
                     },
                 });
             },
