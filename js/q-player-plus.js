@@ -17,6 +17,10 @@
                 case "PLAYER_CREATED":
                     //创建成功player 参数用于后续销毁
                     window.player = info;
+
+                    if (config.isLive) {
+                        document.querySelector('video').style = 'pointer-events: none'
+                    }
                     break;
                 case "GO_LOGIN":
                     alert("登录吧");
