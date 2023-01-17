@@ -1,9 +1,13 @@
 // Create a class for the element
 class PopUpInfo extends HTMLElement {
+    static version() {
+        return 'v1.0.0';
+    }
     constructor() {
         // Always call super first in constructor
         super();
 
+        this.name = 'shadow-player';
         // Create a shadow root
         const shadow = this.attachShadow({ mode: "closed" });
         // Create spans
@@ -157,6 +161,10 @@ class PopUpInfo extends HTMLElement {
         playBtn.classList.add("play");
         playBtn.innerText = "PLAY";
         return playBtn;
+    }
+
+    printf() {
+        console.log('HELLO', this.name);
     }
 }
 
