@@ -19,12 +19,16 @@
                     window.player = info;
 
                     if (config.isLive) {
-                        document.querySelector("video").style = "pointer-events: none";
+                        const video = document.querySelector("video");
+                        video.addEventListener('click', e => {
+                            e.stopImmediatePropagation();
+                        });
+                        // video.style = "pointer-events: none";
                         setInterval(() => {
                             player.dispatch({
                                 type: "socketBarrageNotice",
                                 payload: JSON.stringify({
-                                    msg: { content: Mock.Random.csentence(5, 20), color: Math.random() < 0.98 ? 0 : Mock.Random.d6() },
+                                    msg: { content: Mock.Random.csentence(5, 20), color: Math.random() < 0.95 ? 0 : Mock.Random.d6() },
                                     from: {
                                         n: Mock.Random.cname()
                                     },
