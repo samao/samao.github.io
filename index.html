@@ -74,8 +74,7 @@
             window.addEventListener(
                 "message",
                 function (evt) {
-                    // evt.origin === location.protocol + "//www.youtu.tv" &&
-                    if (evt.data.action === "getIn") {
+                    if (evt.origin === location.protocol + "//www.youtu.tv" && evt.data.action === "getIn") {
                         console.log(evt.data.data);
                         console.log("进入页面", evt.data);
                         toPage("/" + evt.data.toUrl);
