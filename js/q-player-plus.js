@@ -44,7 +44,7 @@
             }
         },
         ui: {
-            danmu: true,
+            danmu: config.isLive,
             effectsBlock: false,
             feedback: false,
             entries: false,
