@@ -1,6 +1,6 @@
 (function () {
-    const isLive = location.search.includes('live')
-    const config = { isLive, demuxType: isLive ? "flv": 'm3u8', rid: 10001822 }; //{ isLive: false, demuxType: "m3u8", rid: 10001822, streamHost: "" };
+    const isLive = location.search.includes("live");
+    const config = { isLive, demuxType: isLive ? "flv" : "m3u8", rid: 10001822 }; //{ isLive: false, demuxType: "m3u8", rid: 10001822, streamHost: "" };
     QiePlayer.createPlayer({
         ...config,
         vid: config.rid,
@@ -19,7 +19,18 @@
                     window.player = info;
 
                     if (config.isLive) {
-                        document.querySelector('video').style = 'pointer-events: none'
+                        document.querySelector("video").style = "pointer-events: none";
+                        setInterval(() => {
+                            player.dispatch({
+                                type: "socketBarrageNotice",
+                                payload: JSON.stringify({
+                                    msg: { content: Mock.Random.csentence(5, 20), color: Math.random() < 0.98 ? 0 : Mock.Random.d6() },
+                                    from: {
+                                        n: Mock.Random.cname()
+                                    },
+                                }),
+                            });
+                        }, 1000);
                     }
                     break;
                 case "GO_LOGIN":
@@ -33,7 +44,7 @@
             }
         },
         ui: {
-            danmu: false,
+            danmu: true,
             effectsBlock: false,
             feedback: false,
             entries: false,
@@ -54,7 +65,7 @@
                         rtmp_url: "https://las-tech.org.cn/kwai",
                         rtmp_live: "las-test_ld500d.flv",
                         rtmp_cdn: "ws",
-                        cdns: ["ws"]
+                        cdns: ["ws"],
                     },
                 };
             },
