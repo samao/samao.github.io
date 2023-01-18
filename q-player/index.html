@@ -2,6 +2,7 @@
     <head>
         <meta charset="utf-8" />
         <title>Q-Player</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
         <script src="/js/log.min.js"></script>
         <script src="/nextStatic/js/player/3.8.3/qie.player.js"></script>
         <link href="favicon.png" rel="shortcut icon" />
@@ -23,6 +24,11 @@
                 display: block;
                 margin: 0 auto;
                 /* filter: drop-shadow(2px 2px 3px black); */
+            }
+
+            .fulled {
+                transition-property: transform;
+                transition-duration: 500ms;
             }
 
             @media (orientation: portrait) {
