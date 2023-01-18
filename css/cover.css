@@ -18,6 +18,15 @@ ul {
     -webkit-animation: rot 16s linear infinite;
     animation: rot 16s linear infinite;
     list-style: none;
+    color: #f00;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @-webkit-keyframes rot {
@@ -35,8 +44,8 @@ ul {
 }
 
 li {
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
     background: #651FFF;
     border-radius: 4px;
     box-shadow: 0 0 1px #fff, 0 0 5px #651FFF, 0 0 10px #651FFF, 0 0 15px #651FFF, 0 0 25px #651FFF, 0 0 55px #651FFF;
@@ -46,6 +55,8 @@ li {
 
 li:not([title]) {
     opacity: 0.6;
+    color: #fff;
+    font-weight: normal;
 }
 
 @-webkit-keyframes scale {
