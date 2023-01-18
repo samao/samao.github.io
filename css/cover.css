@@ -21,6 +21,7 @@ ul {
     color: #f00;
     font-weight: bold;
     font-size: 40px;
+    user-select: none;
 }
 
 li {
