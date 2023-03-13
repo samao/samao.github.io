@@ -10,6 +10,6 @@
             return pageStr;
         });
 
-        container.innerHTML = allInnerHTML.join();
+        container.innerHTML = allInnerHTML.join('');
     })
 })()
