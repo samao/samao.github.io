@@ -81,7 +81,8 @@
             window.addEventListener(
                 "message",
                 function (evt) {
-                    if (evt.origin === location.protocol + "//www.youtu.tv" && evt.data.action === "getIn") {
+                    // evt.origin === location.protocol + "//www.youtu.tv" && 
+                    if (evt.data.action === "getIn") {
                         console.log(evt.data.data);
                         console.log("进入页面", evt.data);
                         toPage("/" + evt.data.toUrl);
@@ -104,7 +105,9 @@
                 ></iframe>`;
 
                 loading.classList.add("show");
-                document.querySelector("iframe").onload = () => {
+                const iframe = document.querySelector("iframe")
+                iframe.onload = () => {
+                    iframe.onload = null;
                     loading.classList.remove("show");
                 };
             }
