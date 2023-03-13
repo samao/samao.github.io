@@ -5,8 +5,9 @@
         const container = document.querySelector('.law');
 
         const allInnerHTML = data.map((page, id) => {
-            let pageStr = `<h1>第${id + 1}章</h1>`
+            let pageStr = '<article>'
             page.forEach(p => pageStr += `<p>${p}</p>`)
+            pageStr += '</article>'
             return pageStr;
         });
 
