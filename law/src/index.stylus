@@ -22,4 +22,4 @@ body, html
     h1
         font-size: vw(42)
         line-height: vw(48)
-        margin-bottom: vw(18)
+        margin: vw(18) 0
