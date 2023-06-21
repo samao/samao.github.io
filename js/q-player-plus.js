@@ -20,6 +20,7 @@
 
                     if (config.isLive) {
                         const video = document.querySelector("video");
+                        video.loop = true;
                         video.addEventListener('click', e => {
                             e.stopImmediatePropagation();
                         });
@@ -66,8 +67,8 @@
                 return {
                     error: 0,
                     data: {
-                        rtmp_url: "https://las-tech.org.cn/kwai",
-                        rtmp_live: "las-test_ld500d.flv",
+                        rtmp_url: "https://www.youtu.tv/stream",
+                        rtmp_live: "live.flv",
                         rtmp_cdn: "ws",
                         cdns: ["ws"],
                     },
