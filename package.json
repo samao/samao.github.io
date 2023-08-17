@@ -8,7 +8,8 @@
     "build:profile": "pug profile/src/index.pug --out profile/ && stylus profile/src/index.stylus -o profile/index.css",
     "build:shadow": "pug shadow-player/src/index.pug --out shadow-player/ && stylus shadow-player/src/index.stylus -o shadow-player/index.css",
     "dev:law": "concurrently \"pug -w law/src/index.pug --out law/\"  \"stylus -w law/src/index.stylus -o law/index.css\"",
-    "build:law": "concurrently \"pug law/src/index.pug --out law/\"  \"stylus law/src/index.stylus -o law/index.css\""
+    "build:law": "concurrently \"pug law/src/index.pug --out law/\"  \"stylus law/src/index.stylus -o law/index.css\"",
+    "hackerSMS": "node hacker.js"
   },
   "repository": {
     "type": "git",
